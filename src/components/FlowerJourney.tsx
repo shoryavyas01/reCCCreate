@@ -8,19 +8,19 @@ const stages = [
   {
     label: "Gather",
     eyebrow: "01 · COLLECT",
-    title: "Gathered with care.",
+    title: "Morning collections.",
     description: "Temple flowers are collected with partner temples in Jaipur and weighed before processing.",
   },
   {
     label: "Reimagine",
     eyebrow: "02 · TRANSFORM",
-    title: "Petals become colour.",
+    title: "Sun-dried. Then ground.",
     description: "Sorted, sun-dried petals are ground into natural gulaal—a new form for flowers offered with meaning.",
   },
   {
     label: "Return",
     eyebrow: "03 · GIVE BACK",
-    title: "Surplus finds the soil.",
+    title: "The rest returns to soil.",
     description: "Petals not used for gulaal are directed to a compost unit, completing another part of the cycle.",
   },
 ] as const;
@@ -40,8 +40,8 @@ export default function FlowerJourney() {
       <div className="container-site">
         <div className="journey-heading">
           <div>
-            <p className="eyebrow mb-4">A journey, not an ending</p>
-            <h2 id="journey-heading" className="max-w-[13ch]">One offering. <span className="display-accent">Another life.</span></h2>
+            <p className="eyebrow mb-4">The work behind the colour</p>
+            <h2 id="journey-heading" className="max-w-[13ch]">Collected. Sorted.<br /><span className="display-accent">Made again.</span></h2>
           </div>
           <p className="body-copy max-w-md">From morning collections to sun-dried colour and compost. Choose a step to see where the petals go.</p>
         </div>
@@ -64,7 +64,7 @@ export default function FlowerJourney() {
               <circle className="journey-orbit-dot" cx="260" cy="306" r="4" />
               <circle className="journey-orbit-dot" cx="260" cy="54" r="4" />
             </svg>
-            <p className="journey-visual-caption">A local cycle with room to grow.</p>
+            <p className="journey-visual-caption">COLLECT → DRY → REMAKE</p>
           </div>
 
           <div className="journey-copy">

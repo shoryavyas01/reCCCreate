@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="container-site footer-main">
         <div>
           <Link href="/" className="footer-brand">ReCCCreate</Link>
-          <p className="footer-claim">Let what blooms, bloom again.</p>
+          <p className="footer-claim">From Jaipur temples.<br />Back to the community.</p>
           <p className="footer-note">A student-led circularity project in Bhankrota, Jaipur, turning temple flowers into natural gulaal and compost.</p>
         </div>
         <div className="footer-links">

@@ -14,8 +14,8 @@ const links = [
 function BrandMark() {
   return (
     <svg viewBox="0 0 40 40" className="brand-mark" aria-hidden="true">
-      <circle cx="20" cy="20" r="19" fill="#e9eee7" />
-      <g fill="#cf783b">
+      <circle cx="20" cy="20" r="19" fill="#e7b759" />
+      <g fill="#8b3b29">
         <ellipse cx="20" cy="11" rx="3.3" ry="6" />
         <ellipse cx="20" cy="11" rx="3.3" ry="6" transform="rotate(60 20 20)" />
         <ellipse cx="20" cy="11" rx="3.3" ry="6" transform="rotate(120 20 20)" />
@@ -23,7 +23,7 @@ function BrandMark() {
         <ellipse cx="20" cy="11" rx="3.3" ry="6" transform="rotate(240 20 20)" />
         <ellipse cx="20" cy="11" rx="3.3" ry="6" transform="rotate(300 20 20)" />
       </g>
-      <circle cx="20" cy="20" r="3" fill="#21483b" />
+      <circle cx="20" cy="20" r="3" fill="#173e36" />
     </svg>
   );
 }
