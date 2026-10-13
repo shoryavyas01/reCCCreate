@@ -1,11 +1,12 @@
 import Link from "next/link";
+import BrandLogo from "./BrandLogo";
 
 export default function Footer() {
   return (
     <footer className="site-footer">
       <div className="container-site footer-main">
         <div>
-          <Link href="/" className="footer-brand">ReCCCreate</Link>
+          <Link href="/" className="footer-brand" aria-label="ReCCCreate home"><BrandLogo footer /></Link>
           <p className="footer-claim">From Jaipur temples.<br />Back to the community.</p>
           <p className="footer-note">A student-led circularity project in Bhankrota, Jaipur, turning temple flowers into natural gulaal and compost.</p>
         </div>

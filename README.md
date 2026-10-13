@@ -45,6 +45,7 @@ Sign in at `/admin`. Only accounts in the `admins` table can sign in or change d
 | Homepage artwork and illustration labels | Hero `Image` and caption in `src/app/page.tsx` |
 | Team names and process descriptions | `team` and `steps` in `src/app/about/page.tsx` |
 | Floral illustrations | `src/components/BotanicalMotif.tsx` |
+| Official logo in the header and footer | `public/brand/recccreate-logo.png` and `src/components/BrandLogo.tsx` |
 | Colours and type sizes | `src/app/globals.css` |
 | Bundled fonts (Montserrat and DM Serif Display) | `public/fonts` and `src/app/layout.tsx` |
 | Database tables and security rules | `supabase/schema.sql` |
