@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const links = [
   { href: "/", label: "Home" },
@@ -31,11 +31,25 @@ function BrandMark() {
 export default function Nav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const header = useRef<HTMLElement>(null);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const closeOutside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !header.current?.contains(event.target)) setOpen(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { setOpen(false); menuButton.current?.focus(); }
+    };
+    document.addEventListener("pointerdown", closeOutside);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => { document.removeEventListener("pointerdown", closeOutside); document.removeEventListener("keydown", closeOnEscape); };
+  }, [open]);
   const linkClass = (href: string) =>
     `nav-link ${pathname === href || (href !== "/" && pathname.startsWith(href)) ? "nav-link-active" : ""}`;
 
   return (
-    <header className="site-header">
+    <header className="site-header" ref={header}>
       <nav aria-label="Main" className="site-nav container-site">
         <Link href="/" className="brand-lockup" onClick={() => setOpen(false)}>
           <BrandMark />
@@ -55,6 +69,7 @@ export default function Nav() {
           <li><Link href="/shop" className="btn btn-primary nav-cta">Explore the shop <span aria-hidden="true">↗</span></Link></li>
         </ul>
         <button
+          ref={menuButton}
           type="button"
           className="menu-button md:hidden"
           aria-expanded={open}

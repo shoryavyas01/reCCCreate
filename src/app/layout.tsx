@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { DM_Serif_Display, Montserrat } from "next/font/google";
+import localFont from "next/font/local";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import SiteMotion from "@/components/SiteMotion";
 import "./globals.css";
 
-const montserrat = Montserrat({
+const montserrat = localFont({
+  src: "../../public/fonts/montserrat-latin-wght-normal.woff2",
   variable: "--font-montserrat",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: "100 900",
   display: "swap",
 });
-const dmSerifDisplay = DM_Serif_Display({
+const dmSerifDisplay = localFont({
+  src: [
+    { path: "../../public/fonts/dm-serif-display-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "../../public/fonts/dm-serif-display-latin-400-italic.woff2", weight: "400", style: "italic" },
+  ],
   variable: "--font-dm-serif",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
   display: "swap",
+  adjustFontFallback: "Times New Roman",
 });
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 const socialImage = siteUrl ? "/images/marigold-to-color.webp" : undefined;
@@ -55,6 +58,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Skip to content
         </a>
+        <SiteMotion />
         <Nav />
         <main id="main" className="flex-1">
           {children}

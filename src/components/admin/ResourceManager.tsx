@@ -37,12 +37,19 @@ export default function ResourceManager({
   const [editing, setEditing] = useState<Row | null>(null);
   const [formKey, setFormKey] = useState(0);
   const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
 
   const load = useCallback(async () => {
-    const { data, error } = await db.from(table).select("*").order(orderBy, { ascending: false }).limit(500);
-    if (error) setMessage({ ok: false, text: `Could not load: ${error.message}` });
-    else setRows(data ?? []);
+    setLoading(true);
+    setLoadError("");
+    try {
+      const { data, error } = await db.from(table).select("*").order(orderBy, { ascending: false }).limit(500);
+      if (error) throw error;
+      setRows(data ?? []);
+    } catch { setLoadError("Could not load entries. Check your connection and try again."); }
+    finally { setLoading(false); }
   }, [db, table, orderBy]);
 
   useEffect(() => {
@@ -57,6 +64,7 @@ export default function ResourceManager({
 
   async function save(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (busy) return;
     const form = new FormData(e.currentTarget);
     setBusy(true);
     setMessage(null);
@@ -69,7 +77,10 @@ export default function ResourceManager({
         else if (f.type === "photo") {
           const file = form.get(`${f.key}_file`);
           if (file instanceof File && file.size > 0) {
-            const path = `${table}/${crypto.randomUUID()}.${file.name.split(".").pop()}`;
+            const extensions: Record<string, string> = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" };
+            if (!extensions[file.type]) throw new Error("Choose a JPG, PNG or WebP photo.");
+            if (file.size > 5 * 1024 * 1024) throw new Error("Photo must be smaller than 5 MB.");
+            const path = `${table}/${crypto.randomUUID()}.${extensions[file.type]}`;
             const { error } = await db.storage.from("photos").upload(path, file);
             if (error) throw new Error(`Photo upload failed: ${error.message}`);
             values[f.key] = db.storage.from("photos").getPublicUrl(path).data.publicUrl;
@@ -90,22 +101,27 @@ export default function ResourceManager({
   }
 
   async function remove(row: Row) {
-    if (!window.confirm("Delete this entry? This cannot be undone.")) return;
-    const { error } = await db.from(table).delete().eq("id", row.id);
-    if (error) setMessage({ ok: false, text: `Could not delete: ${error.message}` });
-    else {
+    if (busy || !window.confirm("Delete this entry? This cannot be undone.")) return;
+    setBusy(true);
+    try {
+      const { error } = await db.from(table).delete().eq("id", row.id);
+      if (error) throw new Error(error.message);
       setMessage({ ok: true, text: "Deleted." });
       if (editing?.id === row.id) resetForm(null);
       await load();
-    }
+    } catch (error) {
+      setMessage({ ok: false, text: error instanceof Error ? error.message : "Could not delete. Please try again." });
+    } finally { setBusy(false); }
   }
 
   async function downloadQr(id: string) {
-    const url = await QRCode.toDataURL(`${siteUrl()}/trace/${id}`, { width: 600, margin: 2 });
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `recccreate-batch-${id}.png`;
-    a.click();
+    try {
+      const url = await QRCode.toDataURL(`${siteUrl()}/trace/${id}`, { width: 600, margin: 2 });
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `recccreate-batch-${id}.png`;
+      a.click();
+    } catch { setMessage({ ok: false, text: "Could not create the QR code. Please try again." }); }
   }
 
   const show = (f: Field, row: Row) => {
@@ -118,7 +134,7 @@ export default function ResourceManager({
 
   return (
     <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_1.6fr]">
-      <form key={formKey} onSubmit={save} className="card flex flex-col gap-4 self-start">
+      <form key={formKey} onSubmit={save} className="card flex flex-col gap-4 self-start p-6">
         <h2 className="text-[22px]">{editing ? "Edit entry" : "Add new"}</h2>
         {fields.map((f) => {
           const id = `${table}-${f.key}`;
@@ -140,7 +156,7 @@ export default function ResourceManager({
                 </select>
               ) : f.type === "photo" ? (
                 <>
-                  <input className="field bg-white" id={id} name={`${f.key}_file`} type="file" accept="image/*" />
+                  <input className="field bg-white" id={id} name={`${f.key}_file`} type="file" accept="image/jpeg,image/png,image/webp" />
                   <input className="field mt-2 bg-white" name={f.key} type="url" placeholder="or paste an image link" aria-label={`${f.label} link`} defaultValue={String(value ?? "")} />
                 </>
               ) : (
@@ -150,7 +166,7 @@ export default function ResourceManager({
                   name={f.key}
                   type={f.type}
                   step={f.type === "number" ? "any" : undefined}
-                  min={f.type === "number" ? 0 : undefined}
+                  min={f.type === "number" ? (["kg", "kg_flowers_used"].includes(f.key) ? 0.001 : 0) : undefined}
                   required={f.required}
                   defaultValue={String(value ?? "")}
                 />
@@ -170,7 +186,7 @@ export default function ResourceManager({
       </form>
 
       <div className="overflow-x-auto">
-        {rows.length === 0 ? (
+        {loading ? <p role="status">Loading entries…</p> : loadError ? <div role="alert"><p className="text-error">{loadError}</p><button type="button" className="btn btn-secondary mt-4" onClick={load}>Try again</button></div> : rows.length === 0 ? (
           <p>Nothing here yet.</p>
         ) : (
           <table className="w-full text-left text-[15px]">
@@ -192,8 +208,8 @@ export default function ResourceManager({
                   {fields.map((f) => <td key={f.key} className="p-2">{show(f, row)}</td>)}
                   <td className="whitespace-nowrap p-2 text-right">
                     {showQr && <button className="mr-3 font-extrabold underline" onClick={() => downloadQr(String(row.id))}>QR code</button>}
-                    <button className="mr-3 font-extrabold underline" onClick={() => resetForm(row)}>Edit</button>
-                    <button className="font-extrabold text-error underline" onClick={() => remove(row)}>Delete</button>
+                    <button className="mr-3 font-extrabold underline" disabled={busy} onClick={() => resetForm(row)}>Edit</button>
+                    <button className="font-extrabold text-error underline" disabled={busy} onClick={() => remove(row)}>Delete</button>
                   </td>
                 </tr>
               ))}

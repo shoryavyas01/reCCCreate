@@ -7,7 +7,7 @@ export default function Footer() {
         <div>
           <Link href="/" className="footer-brand">ReCCCreate</Link>
           <p className="footer-claim">Let what blooms, bloom again.</p>
-          <p className="footer-note">A student-led circularity project in Bhankrota, Jaipur, giving temple-offered flowers a thoughtful next chapter through natural gulaal and compost.</p>
+          <p className="footer-note">A student-led circularity project in Bhankrota, Jaipur, turning temple flowers into natural gulaal and compost.</p>
         </div>
         <div className="footer-links">
           <div>
@@ -28,7 +28,7 @@ export default function Footer() {
       <div className="footer-bottom">
         <div className="container-site footer-bottom-inner">
           <p>A student venture from Dharav High School, Bhankrota, Jaipur.</p>
-          <p>Made with care, petal by petal.</p>
+          <p>© {new Date().getFullYear()} ReCCCreate · Credit. Community. Change.</p>
         </div>
       </div>
     </footer>
