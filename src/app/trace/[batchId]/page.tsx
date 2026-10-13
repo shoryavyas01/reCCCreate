@@ -23,12 +23,12 @@ export default async function Trace({ params }: { params: Promise<{ batchId: str
 
   return <section className="section"><div className="container-site max-w-3xl">
     <p className="eyebrow mb-4">A story worth following</p>
-    <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><h1 className="max-w-[11ch]">Where your pack <span className="display-accent">began.</span></h1><p className="pb-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#7c867f]">Batch {batch.id}</p></div>
+    <div className="trace-header"><h1 className="max-w-[11ch]">Where your pack <span className="display-accent">began.</span></h1><p className="trace-id text-xs font-semibold uppercase tracking-[0.12em] text-[#4e503a]">Batch {batch.id}</p></div>
     <p className="body-copy mb-8 max-w-2xl">The flowers in this pack were offered at a temple, collected by our team and given a second life.</p>
     {sample && <SampleNotice />}
-    <div className="overflow-hidden rounded-[1.5rem] border border-black/[0.08] bg-[#e0c497]">
-      <div className="flex items-center gap-4 border-b border-black/10 px-5 py-5 sm:px-7"><span className="grid h-11 w-11 place-items-center rounded-full bg-[#e8eee8] text-[#21483b]" aria-hidden="true">✳</span><div><p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#7c867f]">Traceability</p><p className="mt-1 font-semibold">A little more meaning in every pack.</p></div></div>
-      <dl className="divide-y divide-black/10 px-5 sm:px-7">{rows.map((row) => <div key={row.label} className="grid gap-1 py-4 sm:grid-cols-[.8fr_1.2fr] sm:gap-5"><dt className="text-xs font-semibold uppercase tracking-[0.1em] text-[#7c867f]">{row.label}</dt><dd className="text-sm font-medium text-[#283b31]">{row.value}</dd></div>)}</dl>
+    <div className="trace-panel overflow-hidden border border-black/[0.08] bg-[#e0c497]">
+      <div className="flex items-center gap-4 border-b border-black/10 px-5 py-5 sm:px-7"><span className="grid h-11 w-11 place-items-center rounded-full bg-[#e8eee8] text-[#21483b]" aria-hidden="true">✳</span><div><p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#4e503a]">Traceability</p><p className="mt-1 font-semibold">A little more meaning in every pack.</p></div></div>
+      <dl className="trace-details divide-y divide-black/10 px-5 sm:px-7">{rows.map((row) => <div key={row.label} className="trace-details-row"><dt className="text-xs font-semibold uppercase tracking-[0.1em] text-[#4e503a]">{row.label}</dt><dd className="text-sm font-medium text-[#283b31]">{row.value}</dd></div>)}</dl>
     </div>
     <div className="mt-8 flex flex-wrap gap-3"><Link href="/about" className="btn btn-primary">Read our story <span aria-hidden="true">↗</span></Link><Link href="/shop" className="btn btn-secondary">Explore the shop</Link></div>
   </div></section>;

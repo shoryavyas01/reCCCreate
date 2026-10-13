@@ -133,7 +133,7 @@ export default function ResourceManager({
   };
 
   return (
-    <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_1.6fr]">
+    <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]">
       <form key={formKey} onSubmit={save} className="card flex flex-col gap-4 self-start p-6">
         <h2 className="text-[22px]">{editing ? "Edit entry" : "Add new"}</h2>
         {fields.map((f) => {
@@ -185,7 +185,7 @@ export default function ResourceManager({
         </div>
       </form>
 
-      <div className="overflow-x-auto">
+      <div className="min-w-0 overflow-x-auto">
         {loading ? <p role="status">Loading entries…</p> : loadError ? <div role="alert"><p className="text-error">{loadError}</p><button type="button" className="btn btn-secondary mt-4" onClick={load}>Try again</button></div> : rows.length === 0 ? (
           <p>Nothing here yet.</p>
         ) : (
