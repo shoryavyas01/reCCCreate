@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+/* Garet (self-hosted). Once the licence is confirmed:
+   1. put Garet-Book.woff2 and Garet-Heavy.woff2 in public/fonts
+   2. remove this comment's opening and closing markers around the two rules below.
+   Until then the site uses Montserrat, the next font in the stack.
+
+@font-face {
+  font-family: "Garet";
+  src: url("/fonts/Garet-Book.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Garet";
+  src: url("/fonts/Garet-Heavy.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+@theme inline {
+  --color-gold: #c9a227;
+  --color-gold-dark: #9c7a12;
+  --color-cream: #fff8dc;
+  --color-green: #2f5d3a;
+  --color-green-light: #e3ede3;
+  --color-ink: #1f2a1f;
+  --color-white: #ffffff;
+  --color-marigold: #e8891c;
+  --color-error: #9b1c1c;
+
+  --font-sans: "Garet", var(--font-montserrat), "Montserrat", system-ui, sans-serif;
+
+  --shadow-soft: 0 6px 24px rgb(31 42 31 / 0.08);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
+h1 {
+  font-size: 34px;
+}
+h2 {
+  font-size: 26px;
+}
+h3 {
+  font-size: 19px;
+}
+@media (min-width: 768px) {
+  h1 {
+    font-size: 48px;
+  }
+  h2 {
+    font-size: 32px;
+  }
+  h3 {
+    font-size: 22px;
+  }
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-[1100px] px-5 md:px-8;
+  }
+  .section {
+    @apply py-14 md:py-24;
+  }
+  .card {
+    @apply rounded-xl bg-green-light p-5 shadow-soft;
+  }
+  .btn {
+    @apply inline-flex min-h-12 items-center justify-center rounded-xl px-6 py-3 text-center font-extrabold uppercase tracking-[0.08em] transition-colors disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply bg-green text-white hover:bg-ink;
+  }
+  .btn-secondary {
+    @apply border-2 border-green bg-transparent text-green hover:bg-green hover:text-white;
+  }
+  .field {
+    @apply block w-full rounded-xl border border-green/40 bg-green-light px-4 py-3 text-ink placeholder:text-ink/60 focus:border-green;
+  }
+  .label {
+    @apply mb-1.5 block text-[15px] font-extrabold;
+  }
+}
