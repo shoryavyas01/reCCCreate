@@ -1,78 +1,50 @@
 import type { Metadata } from "next";
-import MarigoldStem from "@/components/MarigoldStem";
-import PhotoPanel from "@/components/PhotoPanel";
+import Link from "next/link";
 
-export const metadata: Metadata = { title: "About Us" };
+export const metadata: Metadata = {
+  title: "Our story",
+  description: "Meet the students behind ReCCCreate and discover how temple flowers find a second life in Jaipur.",
+};
 
-// Add each person's role and photo (put files in public/team and set `photo`).
-const team: { name: string; role: string; photo?: string }[] = [
-  { name: "Aryaman", role: "Role to be added" },
-  { name: "Shubhi", role: "Role to be added" },
-  { name: "Paridhi", role: "Role to be added" },
-  { name: "Kushagra", role: "Role to be added" },
-];
-
-const steps: { title: string; caption: string; photo?: string }[] = [
-  { title: "Collection", caption: "Flowers picked up from temples each morning and weighed." },
-  {
-    title: "Recycling",
-    caption: "Petals sorted, sun-dried and ground into gulaal; surplus goes to a compost unit.",
-  },
-  { title: "Eco-friendly packaging", caption: "Paper pouches with a QR code that traces each batch." },
-  { title: "Selling", caption: "At school and to the community." },
+const team = ["Aryaman", "Shubhi", "Paridhi", "Kushagra"];
+const steps = [
+  { title: "Collection", caption: "Flowers are picked up from partner temples each morning and weighed.", symbol: "01" },
+  { title: "A new purpose", caption: "Petals are sorted, sun-dried and ground into gulaal; surplus goes to a compost unit.", symbol: "02" },
+  { title: "Thoughtful packaging", caption: "Paper pouches carry a QR code that traces the story of each batch.", symbol: "03" },
+  { title: "Shared locally", caption: "Our products are shared at school and with the community.", symbol: "04" },
 ];
 
 export default function About() {
   return (
-    <div className="container-site pt-6">
-      <MarigoldStem>
-        <section className="section" data-stem-node aria-labelledby="story-heading">
-          <h1 id="story-heading">Our story</h1>
-          <p className="mt-6 max-w-2xl text-xl">
-            We are students of Dharav High School, Bhankrota. We started ReCCCreate for our TGELF project and found a
-            huge gap: tonnes of temple flowers wasted every day. Through selling gulaal, we promote recycling and
-            eco-friendly practices.
-          </p>
-          <p className="mt-6 font-extrabold uppercase tracking-[0.08em] text-green">
-            CCC stands for Credit. Community. Change.
-          </p>
-        </section>
+    <>
+      <section className="section pb-12"><div className="container-site">
+        <p className="eyebrow mb-6">Our story</p>
+        <div className="grid gap-8 md:grid-cols-[1.1fr_.9fr] md:items-end">
+          <h1 className="max-w-[10ch]">A small idea, with <span className="display-accent">room to grow.</span></h1>
+          <p className="body-copy max-w-xl md:pb-2">We are students of Dharav High School in Bhankrota, Jaipur. ReCCCreate began as our TGELF project—and became a way to make something thoughtful from flowers offered at temples.</p>
+        </div>
+        <div className="mt-12 rounded-[1.6rem] bg-[#21483b] p-7 text-white sm:p-10 md:p-12">
+          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-white/55">Our name is our promise</p>
+          <p className="mt-4 font-serif text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl">Credit. Community. Change.</p>
+          <p className="mt-5 max-w-2xl text-sm leading-7 text-white/75">A better cycle begins with respect: for the flowers, for the people who offer them, and for the community that gives them a next chapter.</p>
+        </div>
+      </div></section>
 
-        <section className="section pt-0 md:pt-0" data-stem-node aria-labelledby="team-heading">
-          <h2 id="team-heading" className="mb-8">
-            Team
-          </h2>
-          <ul className="grid grid-cols-2 gap-5 lg:grid-cols-4">
-            {team.map((m) => (
-              <li key={m.name} className="card flex flex-col gap-3 p-4">
-                <PhotoPanel src={m.photo} alt={m.name} ratio="aspect-square" />
-                <div>
-                  <h3>{m.name}</h3>
-                  <p className="text-[15px]">{m.role}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
+      <section className="section-tight bg-white/55" aria-labelledby="how-heading"><div className="container-site">
+        <div className="mb-9 max-w-2xl"><p className="eyebrow mb-4">The process</p><h2 id="how-heading">A little care at every step.</h2></div>
+        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{steps.map((step) => <li key={step.symbol} className="card p-4"><div className="process-visual mb-5"><span className="font-serif text-4xl italic text-[#b66f3d]">{step.symbol}</span></div><h3>{step.title}</h3><p className="mt-3 text-sm leading-7 text-[#657169]">{step.caption}</p></li>)}</ol>
+        <div className="mt-7 flex items-center gap-3 text-sm text-[#657169]"><span className="h-2 w-2 rounded-full bg-[#c7773c]" aria-hidden="true" /><span>Each batch can be traced from the QR code on its pack.</span></div>
+      </div></section>
 
-        <section className="section pt-0 md:pt-0" data-stem-node aria-labelledby="process-heading">
-          <h2 id="process-heading" className="mb-8">
-            Our process
-          </h2>
-          <ol className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((s, i) => (
-              <li key={s.title} className="card flex flex-col gap-3 p-4">
-                <PhotoPanel src={s.photo} alt={s.title} />
-                <div>
-                  <p className="text-[13px] font-extrabold uppercase tracking-[0.08em] text-green">Step {i + 1}</p>
-                  <h3>{s.title}</h3>
-                  <p className="mt-1 text-[15px]">{s.caption}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-      </MarigoldStem>
-    </div>
+      <section className="section" aria-labelledby="team-heading"><div className="container-site grid gap-10 md:grid-cols-[.75fr_1.25fr]">
+        <div><p className="eyebrow mb-4">The people behind the petals</p><h2 id="team-heading">A student team, learning by doing.</h2><p className="body-copy mt-5">We are building ReCCCreate together at Dharav High School. Roles and portraits will be added as the project grows.</p></div>
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">{team.map((name, index) => <li key={name} className="card team-card"><span className="team-monogram" aria-hidden="true">{name.slice(0, 1)}</span><p className="mt-5 font-semibold">{name}</p><p className="mt-1 text-xs text-[#657169]">Student team</p><span className="mt-5 block text-[0.65rem] font-semibold tracking-[0.14em] text-[#a1aaa3]">0{index + 1}</span></li>)}</ul>
+      </div></section>
+
+      <section className="section-tight"><div className="container-site"><div className="flex flex-col gap-5 rounded-[1.5rem] border border-black/[0.08] bg-white/65 p-7 sm:flex-row sm:items-center sm:justify-between sm:p-9">
+        <div><p className="eyebrow mb-3">Be part of the next chapter</p><h3 className="text-2xl">Good things grow together.</h3></div>
+        <Link href="/contact" className="btn btn-primary self-start sm:self-auto">Talk with us <span aria-hidden="true">↗</span></Link>
+      </div></div></section>
+    </>
   );
 }
