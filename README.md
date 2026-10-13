@@ -86,3 +86,7 @@ The visual system draws on Jaipur floral block prints and architectural arches: 
 - Admin screens show loading and retry states, report save/delete/QR failures, verify access against the current user, and accept JPG/PNG/WebP photos up to 5 MB.
 
 Live email delivery, authentication and database changes still require the configured services and should be checked against your own staging project before release. Illustrations and sample data are labelled; replace them with approved project records and photographs when available.
+
+### Colour and craft refinement
+
+The opening now uses forest green and marigold, with ochre collection panels, terracotta traceability, floral block-print repeats and jaali borders. Product illustrations use separate flower and sprout drawings; offset compositions and concrete copy replace repeated cream sections and slogans. Turbopack build persistence is disabled after repeated cache database failures; local fonts remain bundled for network-independent builds.
