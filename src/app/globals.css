@@ -52,9 +52,10 @@ button,summary { cursor:pointer; }
 .site-header { position:sticky; top:0; z-index:40; border-bottom:1px solid #d5bb7b40; background:#173e36; color:#f4e4c2; }
 .site-nav { display:flex; min-height:5.7rem; align-items:center; justify-content:space-between; gap:1rem; }
 .brand-lockup { display:flex; align-items:center; gap:.75rem; text-decoration:none; }
-.brand-mark { width:2.5rem; height:2.5rem; }
-.brand-name { display:block; font-size:1.2rem; font-weight:700; letter-spacing:-.06em; line-height:1; }
-.brand-tagline { display:block; margin-top:.4rem; color:#cfcbad; font-size:.48rem; letter-spacing:.15em; line-height:1.2; }
+/* The original square artwork is preserved; the viewport frames its wordmark. */
+.brand-logo-frame { position:relative; display:block; flex-shrink:0; width:220px; height:64px; overflow:hidden; background:#f7f5ef; border-radius:2px; }
+.brand-logo-image { position:absolute; width:125%; max-width:none; height:auto; left:-12.5%; top:50%; transform:translateY(-48.075%); }
+.brand-logo-footer { width:300px; height:86px; }
 .nav-link { display:inline-block; color:#e0dac2; font-size:.74rem; text-decoration:none; padding:.4rem 0; border-bottom:1px solid transparent; }
 .nav-link:hover,.nav-link-active { color:#efbe63; border-bottom-color:#efbe63; }
 .nav-cta { background:#e6b557; color:#213c31; min-height:2.8rem; padding:.75rem 1.1rem; font-size:.7rem; }
@@ -190,7 +191,7 @@ button,summary { cursor:pointer; }
 .closing-botanical { position:absolute; height:110%; width:25rem; right:1rem; bottom:-3rem; color:#355b437a; transform:rotate(12deg); }
 .site-footer { margin-top:2rem; background:#173e36; color:#f6f1e7; border-top:32px solid transparent; border-image:url("/patterns/jaali-border.svg") 32 repeat; }
 .footer-main { display:grid; grid-template-columns:1.2fr 1fr; gap:5rem; padding-block:5rem; }
-.footer-brand { font-size:1.4rem; letter-spacing:-.06em; font-weight:700; text-decoration:none; }
+.footer-brand { display:inline-block; max-width:100%; font-size:1.4rem; letter-spacing:-.06em; font-weight:700; text-decoration:none; }
 .footer-claim { max-width:17ch; margin-top:1.5rem; font-family:var(--font-display); font-size:clamp(2.3rem,4vw,3.8rem); line-height:1.1; }
 .footer-note { margin-top:1.5rem; max-width:28rem; color:#c8cdb6; font-size:.8rem; line-height:1.9; }
 .footer-links { display:grid; grid-template-columns:1fr 1fr; gap:2rem; }
@@ -232,7 +233,8 @@ button,summary { cursor:pointer; }
 @media (max-width:767px) {
   .container-site { width:calc(100% - 2.2rem); }
   .site-nav { min-height:4.7rem; }
-  .brand-name { font-size:1.1rem; }
+  .brand-logo-frame { width:180px; height:52px; }
+  .brand-logo-footer { width:300px; max-width:100%; height:86px; }
   .nav-links { display:none; }
   .menu-button { display:block; }
   .hero-grid,.story-grid,.journey-card,.trace-grid,.faq-grid,.footer-main { grid-template-columns:1fr; }

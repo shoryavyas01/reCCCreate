@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import BrandLogo from "./BrandLogo";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -10,23 +11,6 @@ const links = [
   { href: "/shop", label: "Shop" },
   { href: "/contact", label: "Contact" },
 ];
-
-function BrandMark() {
-  return (
-    <svg viewBox="0 0 40 40" className="brand-mark" aria-hidden="true">
-      <circle cx="20" cy="20" r="19" fill="#e7b759" />
-      <g fill="#8b3b29">
-        <ellipse cx="20" cy="11" rx="3.3" ry="6" />
-        <ellipse cx="20" cy="11" rx="3.3" ry="6" transform="rotate(60 20 20)" />
-        <ellipse cx="20" cy="11" rx="3.3" ry="6" transform="rotate(120 20 20)" />
-        <ellipse cx="20" cy="11" rx="3.3" ry="6" transform="rotate(180 20 20)" />
-        <ellipse cx="20" cy="11" rx="3.3" ry="6" transform="rotate(240 20 20)" />
-        <ellipse cx="20" cy="11" rx="3.3" ry="6" transform="rotate(300 20 20)" />
-      </g>
-      <circle cx="20" cy="20" r="3" fill="#173e36" />
-    </svg>
-  );
-}
 
 export default function Nav() {
   const pathname = usePathname();
@@ -51,12 +35,8 @@ export default function Nav() {
   return (
     <header className="site-header" ref={header}>
       <nav aria-label="Main" className="site-nav container-site">
-        <Link href="/" className="brand-lockup" onClick={() => setOpen(false)}>
-          <BrandMark />
-          <span>
-            <span className="brand-name">ReCCCreate</span>
-            <span className="brand-tagline">CREDIT · COMMUNITY · CHANGE</span>
-          </span>
+        <Link href="/" className="brand-lockup" aria-label="ReCCCreate home" onClick={() => setOpen(false)}>
+          <BrandLogo />
         </Link>
         <ul className="nav-links hidden items-center gap-7 md:flex">
           {links.map((link) => (
