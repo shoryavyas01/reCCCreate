@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000. Without any keys the site still runs: it shows clearly labelled sample data, and the forms say they are not connected.
+Open http://localhost:3000. Without any keys the site still runs: it shows clearly labelled sample data, and submission is disabled with an unavailable notice.
 
 ## Connect the services
 
@@ -42,10 +42,11 @@ Sign in at `/admin`. Only accounts in the `admins` table can sign in or change d
 | What | Where |
 |---|---|
 | Temples, collections, batches, products | `/admin` |
-| Home page hero photos and credits | `heroPhotos` in `src/app/page.tsx` |
-| Team names, roles and photos | `team` in `src/app/about/page.tsx` (photos go in `public/team`) |
-| Process photos | `steps` in `src/app/about/page.tsx` |
-| Colours, type sizes, Garet font | `src/app/globals.css` |
+| Homepage artwork and illustration labels | Hero `Image` and caption in `src/app/page.tsx` |
+| Team names and process descriptions | `team` and `steps` in `src/app/about/page.tsx` |
+| Floral illustrations | `src/components/BotanicalMotif.tsx` |
+| Colours and type sizes | `src/app/globals.css` |
+| Bundled fonts (Montserrat and DM Serif Display) | `public/fonts` and `src/app/layout.tsx` |
 | Database tables and security rules | `supabase/schema.sql` |
 
 ## How the figures are worked out
@@ -71,5 +72,17 @@ In `/admin` > Batches, each batch has a **QR code** button that downloads a PNG 
 - [ ] Process, temple and product photos (own photos, or Unsplash/Pexels with credit)
 - [ ] Each temple's permission before ticking "Shown on the site"
 - [ ] Product prices
-- [ ] Garet font files in `public/fonts`, licence confirmed, `@font-face` rules switched on in `globals.css`
 - [ ] Send a test message from both forms and check it arrives
+
+## Design and interaction updates
+
+The visual system draws on Jaipur floral block prints and architectural arches: paper, sandstone, marigold and botanical green, with original vector ornaments. Fonts are bundled locally with their SIL Open Font License files; builds do not contact Google Fonts. The homepage introduces the flower cycle, collection, recorded impact, temple partners, batch lookup and practical FAQs.
+
+- Product filters support `/shop?type=gulaal` and `/shop?type=compost`. Choosing a product selects it in the request form and shows the product subtotal when a price is published.
+- Sample products cannot be ordered. Missing form credentials show an unavailable state; setup details stay out of public notices.
+- Forms prevent duplicate submissions, preserve entries after failures and stop waiting after 15 seconds. A timeout warns that delivery may be uncertain.
+- Loading, route retry, root error and missing-page states match the design. Batch IDs are validated before querying.
+- Section entrances, the moving cycle path and botanical movement respect reduced-motion preferences. Mobile navigation closes on Escape and outside clicks.
+- Admin screens show loading and retry states, report save/delete/QR failures, verify access against the current user, and accept JPG/PNG/WebP photos up to 5 MB.
+
+Live email delivery, authentication and database changes still require the configured services and should be checked against your own staging project before release. Illustrations and sample data are labelled; replace them with approved project records and photographs when available.

@@ -17,8 +17,9 @@ export async function getTemples(): Promise<{ data: TempleWithTotal[]; sample: b
    The average is taken over every day from the first collection to the last,
    so days with no pickup count as zero and the estimate stays cautious. */
 export function projectYear(kg: number, firstDay: string | null, lastDay: string | null) {
-  if (!firstDay || !lastDay || kg <= 0) return null;
+  if (!firstDay || !lastDay || !Number.isFinite(kg) || kg <= 0) return null;
   const days = Math.round((Date.parse(lastDay) - Date.parse(firstDay)) / 86_400_000) + 1;
+  if (!Number.isFinite(days) || days <= 0) return null;
   return Math.round((kg / days) * 365);
 }
 
@@ -47,6 +48,7 @@ export async function getProducts(): Promise<{ data: Product[]; sample: boolean 
 }
 
 export async function getBatch(id: string): Promise<{ data: BatchTrace | null; sample: boolean }> {
+  if (!/^[a-zA-Z0-9_-]{1,80}$/.test(id)) return { data: null, sample: false };
   const db = getSupabase();
   if (!db) return { data: id === sampleBatch.id ? sampleBatch : null, sample: true };
   const { data, error } = await db

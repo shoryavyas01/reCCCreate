@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import BotanicalMotif from "./BotanicalMotif";
 
 const stages = [
   {
@@ -35,19 +36,20 @@ export default function FlowerJourney() {
   const stage = stages[activeStage];
 
   return (
-    <section className="section-tight journey-section" aria-labelledby="journey-heading">
+    <section className="section-tight journey-section" aria-labelledby="journey-heading" data-reveal>
       <div className="container-site">
         <div className="journey-heading">
           <div>
             <p className="eyebrow mb-4">A journey, not an ending</p>
             <h2 id="journey-heading" className="max-w-[13ch]">One offering. <span className="display-accent">Another life.</span></h2>
           </div>
-          <p className="body-copy max-w-md">A thoughtful cycle starts small: collect, transform, and make room for what comes next.</p>
+          <p className="body-copy max-w-md">From morning collections to sun-dried colour and compost. Choose a step to see where the petals go.</p>
         </div>
 
         <div className="journey-card">
           <div className="journey-visual">
             <div className="journey-visual-label">FLOWER · COLOUR · SOIL</div>
+            <BotanicalMotif className="absolute w-28 journey-flower" />
             <svg className="journey-diagram" viewBox="0 0 520 360" role="img" aria-labelledby="journey-diagram-title journey-diagram-desc">
               <title id="journey-diagram-title">Three steps in the ReCCCreate flower cycle</title>
               <desc id="journey-diagram-desc">A curved path links flower collection, natural gulaal, and compost from surplus petals.</desc>
@@ -79,7 +81,7 @@ export default function FlowerJourney() {
                 </button>
               ))}
             </div>
-            <div className="journey-copy-content" aria-live="polite">
+            <div key={activeStage} className="journey-copy-content" aria-live="polite">
               <p className="eyebrow mb-4">{stage.eyebrow}</p>
               <h3 className="journey-title">{stage.title}</h3>
               <p className="journey-description mt-4">{stage.description}</p>

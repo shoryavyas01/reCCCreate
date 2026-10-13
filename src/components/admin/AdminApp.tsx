@@ -16,7 +16,8 @@ const tabs: { id: Tab; label: string }[] = [
 export default function AdminApp() {
   const db = getSupabase();
   const [session, setSession] = useState<Session | null>(null);
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [authorizedUserId, setAuthorizedUserId] = useState<string | null>(null);
+  const isAdmin = Boolean(session && authorizedUserId === session.user.id);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [tab, setTab] = useState<Tab>("temples");
@@ -25,7 +26,10 @@ export default function AdminApp() {
 
   useEffect(() => {
     if (!db) return;
-    db.auth.getSession().then(({ data }) => setSession(data.session));
+    db.auth.getSession().then(({ data, error }) => {
+      if (error) setError("Could not restore your session. Please sign in again.");
+      setSession(data.session);
+    }).catch(() => setError("Could not connect. Check your connection and reload."));
     const { data } = db.auth.onAuthStateChange((_event, s) => setSession(s));
     return () => data.subscription.unsubscribe();
   }, [db]);
@@ -35,16 +39,18 @@ export default function AdminApp() {
   useEffect(() => {
     if (!db || !userId) return;
     let cancelled = false;
-    db.from("admins")
+    Promise.resolve(db.from("admins")
       .select("user_id")
       .eq("user_id", userId)
-      .maybeSingle()
-      .then(async ({ data }) => {
+      .maybeSingle())
+      .then(async ({ data, error }) => {
         if (cancelled) return;
-        if (data) return setIsAdmin(true);
+        if (data && !error) return setAuthorizedUserId(userId);
         await db.auth.signOut();
-        setIsAdmin(null);
-        setError("This account is not an admin.");
+        setAuthorizedUserId(null);
+        setError(error ? "Could not verify admin access. Please try again." : "This account is not an admin.");
+      }).catch(() => {
+        if (!cancelled) { setError("Could not verify access. Please reload and try again."); setSession(null); }
       });
     return () => {
       cancelled = true;
@@ -64,7 +70,7 @@ export default function AdminApp() {
 
   if (!db) {
     return (
-      <div className="card max-w-xl">
+      <div className="card max-w-xl p-8">
         <h1>Admin</h1>
         <p className="mt-4">
           Supabase is not connected yet. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to
@@ -79,12 +85,15 @@ export default function AdminApp() {
     const form = new FormData(e.currentTarget);
     setBusy(true);
     setError("");
-    const { error } = await db!.auth.signInWithPassword({
-      email: String(form.get("email")),
-      password: String(form.get("password")),
-    });
-    if (error) setError("Wrong email or password.");
-    setBusy(false);
+    try {
+      const { error } = await db!.auth.signInWithPassword({
+        email: String(form.get("email")).trim(),
+        password: String(form.get("password")),
+      });
+      if (error) setError("Could not sign in. Check your email and password, then try again.");
+    } catch {
+      setError("Could not reach the server. Check your connection and try again.");
+    } finally { setBusy(false); }
   }
 
   if (!session || !isAdmin) {
@@ -144,7 +153,14 @@ export default function AdminApp() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1>Admin</h1>
-        <button className="btn btn-secondary" onClick={() => db.auth.signOut().then(() => setIsAdmin(null))}>
+        <button className="btn btn-secondary" onClick={async () => {
+          try {
+            const { error } = await db.auth.signOut();
+            if (error) throw error;
+            setAuthorizedUserId(null);
+            setSession(null);
+          } catch { setError("Could not sign out. Check your connection and try again."); }
+        }}>
           Sign out
         </button>
       </div>
@@ -166,6 +182,7 @@ export default function AdminApp() {
         ))}
       </div>
 
+      {error && <p role="alert" className="mt-5 text-error">{error}</p>}
       <ResourceManager key={tab} db={db} table={tab} fields={fields[tab]} orderBy={orderBy[tab]} showQr={tab === "batches"} />
     </div>
   );
