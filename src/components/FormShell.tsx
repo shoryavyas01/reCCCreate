@@ -30,12 +30,12 @@ export default function FormShell({ subject, submitLabel, thanks, children, disa
     }
   }
   if (status === "sent") return <div ref={feedback} role="status" tabIndex={-1} className="card p-8"><p className="eyebrow mb-4">Received with thanks</p><h3 className="font-display text-3xl font-normal">Your next chapter starts here.</h3><p className="mt-4 text-sm leading-7">{thanks}</p><button type="button" className="btn btn-secondary mt-6" onClick={() => setStatus("idle")}>Send another</button></div>;
-  return <form onSubmit={onSubmit} className="flex flex-col gap-5" aria-busy={status === "sending"}>
+  return <form onSubmit={onSubmit} className="form-shell flex flex-col gap-5" aria-busy={status === "sending"}>
     {unavailable && <p role="status" className="sample-notice">{unavailable}</p>}
     <fieldset disabled={status === "sending" || Boolean(unavailable)} className="flex min-w-0 flex-col gap-5 border-0 p-0">{children}</fieldset>
     <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
     {error && <div ref={feedback} tabIndex={-1} role="alert" className="border border-error bg-[#fff6ee] px-4 py-3 text-sm text-error"><strong>Message not sent.</strong><p className="mt-1">{error} Your details have been kept so you can retry.</p></div>}
     <button type="submit" className="btn btn-primary self-start" disabled={status === "sending" || Boolean(unavailable)}>{status === "sending" ? "Sending…" : submitLabel}<span aria-hidden="true">↗</span></button>
-    <p className="text-xs leading-6 text-[#646c59]">We use these details to respond to your enquiry. Please avoid including sensitive personal information.</p>
+    <p className="text-xs leading-6 text-[#4e503a]">We use these details to respond to your enquiry. Please avoid including sensitive personal information.</p>
   </form>;
 }

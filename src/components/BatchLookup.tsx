@@ -17,7 +17,7 @@ export default function BatchLookup() {
     router.push(`/trace/${encodeURIComponent(value)}`);
   }}>
     <label className="label" htmlFor="batch-lookup">Batch ID on your pack</label>
-    <div className="flex flex-col gap-3 sm:flex-row">
+    <div className="batch-lookup-controls">
       <input id="batch-lookup" name="batch" className="field" placeholder="e.g. sample" required maxLength={80} aria-invalid={Boolean(error)} aria-describedby={error ? "batch-error" : undefined} onChange={() => setError("")} />
       <button type="submit" className="btn btn-primary shrink-0">Trace my pack <span aria-hidden="true">↗</span></button>
     </div>

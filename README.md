@@ -91,3 +91,7 @@ Live email delivery, authentication and database changes still require the confi
 ### Colour and craft refinement
 
 The opening now uses forest green and marigold, with ochre collection panels, terracotta traceability, floral block-print repeats and jaali borders. Product illustrations use separate flower and sprout drawings; offset compositions and concrete copy replace repeated cream sections and slogans. Turbopack build persistence is disabled after repeated cache database failures; local fonts remain bundled for network-independent builds.
+
+### Layout conventions
+
+Page introductions and paired sections use equal-width columns and one shared gutter/gap system. Team cards occupy a full-width grid; collection and product artwork have consistent proportions. Contact and order field rows use container queries, so fields stay stacked until the actual form panel is wide enough. Long batch details wrap, and admin tables scroll within their own panel.
