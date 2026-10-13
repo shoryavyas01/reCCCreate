@@ -13,7 +13,7 @@ const links = [
 
 function BrandMark() {
   return (
-    <svg viewBox="0 0 40 40" className="h-9 w-9 shrink-0" aria-hidden="true">
+    <svg viewBox="0 0 40 40" className="brand-mark" aria-hidden="true">
       <circle cx="20" cy="20" r="19" fill="#e9eee7" />
       <g fill="#cf783b">
         <ellipse cx="20" cy="11" rx="3.3" ry="6" />
@@ -35,19 +35,53 @@ export default function Nav() {
     `nav-link ${pathname === href || (href !== "/" && pathname.startsWith(href)) ? "nav-link-active" : ""}`;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-black/[0.06] bg-[#f8f7f2]/90 backdrop-blur-xl">
-      <nav aria-label="Main" className="container-site flex min-h-[4.6rem] items-center justify-between gap-5">
-        <Link href="/" className="flex items-center gap-2.5 text-[#1b2a23] no-underline" onClick={() => setOpen(false)}>
+    <header className="site-header">
+      <nav aria-label="Main" className="site-nav container-site">
+        <Link href="/" className="brand-lockup" onClick={() => setOpen(false)}>
           <BrandMark />
-          <span className="flex flex-col leading-none"><span className="text-[1.05rem] font-bold tracking-[-0.055em]">ReCCCreate</span><span className="mt-1 text-[0.58rem] font-semibold tracking-[0.13em] text-[#718078]">CREDIT. COMMUNITY. CHANGE.</span></span>
+          <span>
+            <span className="brand-name">ReCCCreate</span>
+            <span className="brand-tagline">CREDIT · COMMUNITY · CHANGE</span>
+          </span>
         </Link>
-        <ul className="hidden items-center gap-8 md:flex">
-          {links.map((link) => <li key={link.href}><Link href={link.href} className={linkClass(link.href)} aria-current={pathname === link.href ? "page" : undefined}>{link.label}</Link></li>)}
-          <li><Link href="/shop" className="btn btn-primary min-h-10 px-4 py-2 text-xs">Explore the shop <span aria-hidden="true">↗</span></Link></li>
+        <ul className="nav-links hidden items-center gap-7 md:flex">
+          {links.map((link) => (
+            <li key={link.href}>
+              <Link href={link.href} className={linkClass(link.href)} aria-current={pathname === link.href ? "page" : undefined}>
+                {link.label}
+              </Link>
+            </li>
+          ))}
+          <li><Link href="/shop" className="btn btn-primary nav-cta">Explore the shop <span aria-hidden="true">↗</span></Link></li>
         </ul>
-        <button type="button" className="rounded-full border border-black/15 px-4 py-2 text-sm font-semibold text-[#1b2a23] md:hidden" aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((value) => !value)}>{open ? "Close" : "Menu"}</button>
+        <button
+          type="button"
+          className="menu-button md:hidden"
+          aria-expanded={open}
+          aria-controls="mobile-menu"
+          aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+          onClick={() => setOpen((value) => !value)}
+        >
+          {open ? "Close" : "Menu"}
+        </button>
       </nav>
-      {open && <div id="mobile-menu" className="border-t border-black/[0.06] bg-[#f8f7f2] md:hidden"><ul className="container-site flex flex-col gap-1 py-3">{links.map((link) => <li key={link.href}><Link href={link.href} className={`${linkClass(link.href)} block rounded-xl px-3 py-3`} aria-current={pathname === link.href ? "page" : undefined} onClick={() => setOpen(false)}>{link.label}</Link></li>)}</ul></div>}
+      <div id="mobile-menu" className="mobile-menu container-site md:hidden" hidden={!open}>
+        <ul className="flex flex-col gap-1">
+          {links.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className={`${linkClass(link.href)} block rounded-xl px-3 py-3`}
+                aria-current={pathname === link.href ? "page" : undefined}
+                onClick={() => setOpen(false)}
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+          <li className="px-2 pb-1 pt-2"><Link href="/shop" className="btn btn-primary w-full" onClick={() => setOpen(false)}>Explore the shop <span aria-hidden="true">↗</span></Link></li>
+        </ul>
+      </div>
     </header>
   );
 }
