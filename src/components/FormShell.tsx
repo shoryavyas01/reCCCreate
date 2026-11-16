@@ -3,12 +3,13 @@
 import { useRef, useState, type ReactNode } from "react";
 import { sendForm, web3formsConfigured } from "@/lib/web3forms";
 
-export default function FormShell({ subject, submitLabel, thanks, children, disabledReason, onSent }: { subject: string; submitLabel: string; thanks: string; children: ReactNode; disabledReason?: string; onSent?: () => void }) {
+/* Sends through Web3Forms by default; pass `send` to deliver the form somewhere else. */
+export default function FormShell({ subject, submitLabel, thanks, children, disabledReason, onSent, send }: { subject: string; submitLabel: string; thanks: string; children: ReactNode; disabledReason?: string; onSent?: () => void; send?: (form: HTMLFormElement) => Promise<void> }) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
   const [error, setError] = useState("");
   const inFlight = useRef(false);
   const feedback = useRef<HTMLDivElement>(null);
-  const unavailable = disabledReason || (!web3formsConfigured ? "Messages are temporarily unavailable. Please check back once the team opens enquiries." : undefined);
+  const unavailable = disabledReason || (!send && !web3formsConfigured ? "Messages are temporarily unavailable. Please check back once the team opens enquiries." : undefined);
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (inFlight.current || unavailable) return;
@@ -17,7 +18,7 @@ export default function FormShell({ subject, submitLabel, thanks, children, disa
     setStatus("sending");
     setError("");
     try {
-      await sendForm(subject, form);
+      await (send ? send(form) : sendForm(subject, form));
       form.reset();
       onSent?.();
       setStatus("sent");

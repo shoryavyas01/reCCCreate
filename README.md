@@ -37,11 +37,25 @@ Copy `.env.example` to `.env.local` and fill it in. Never commit `.env.local`.
 
 Sign in at `/admin`. Only accounts in the `admins` table can sign in or change data; the database itself enforces this.
 
+### 3. Google Sheet (Phool Mitra sign-ups)
+
+Each sign-up on `/phool-mitra` becomes a new row with Timestamp, Name, Phone, Area/Locality, Nearest Temple(s) and Collection Frequency. The browser sends the form to the site's own `/api/phool-mitra` route, which checks it and passes it to a Google Apps Script attached to the sheet. The script address and secret stay on the server, so visitors never see them.
+
+1. Create a Google Sheet (for example "Phool Mitra sign-ups") with the team's Google account.
+2. In the sheet, open **Extensions > Apps Script**. Delete the sample code, paste in all of `google-apps-script/phool-mitra.gs`, and save.
+3. Make up a long random secret (for example, run `openssl rand -hex 24` in Terminal). In Apps Script, open **Project Settings** (gear icon) > **Script properties** > **Add script property**, name it `SHARED_SECRET`, and paste the secret as its value.
+4. Click **Deploy > New deployment**, choose type **Web app**, set **Execute as: Me** and **Who has access: Anyone**, then click **Deploy**. Approve the permission prompt with the team account. Copy the web app URL, which ends in `/exec`.
+5. Put the URL in `PHOOL_MITRA_SCRIPT_URL` and the secret in `PHOOL_MITRA_SECRET`, in `.env.local` and in Vercel (**Settings > Environment Variables**), then redeploy. Until both are set, the form shows "sign-ups open soon" and cannot be sent.
+
+The first sign-up creates a tab called **Sign-ups** with the header row. "Anyone" access is needed for the site to reach the script; the secret is what stops anyone else adding rows. If you change the script later, use **Deploy > Manage deployments > Edit > New version**, so the URL stays the same.
+
 ## Where to change things
 
 | What | Where |
 |---|---|
 | Temples, collections, batches, products | `/admin` |
+| Phool Mitra sign-ups | The Google Sheet (see above) |
+| Phool Mitra page text and steps | `src/app/phool-mitra/page.tsx` |
 | Homepage artwork and illustration labels | Hero `Image` and caption in `src/app/page.tsx` |
 | Team names and process descriptions | `team` and `steps` in `src/app/about/page.tsx` |
 | Floral illustrations | `src/components/BotanicalMotif.tsx` |
