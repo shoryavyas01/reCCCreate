@@ -108,7 +108,7 @@ export default function About() {
 
       <section className="section-tight"><div className="container-site"><div className="flex flex-col gap-5 rounded-sm border border-black/[0.08] bg-[#c4c394] p-7 sm:flex-row sm:items-center sm:justify-between sm:p-9">
         <div><p className="eyebrow mb-3">Be part of the next chapter</p><h3 className="text-2xl">Good things grow together.</h3></div>
-        <Link href="/contact" className="btn btn-primary self-start sm:self-auto">Talk with us <span aria-hidden="true">↗</span></Link>
+        <Link href="/contact" className="btn btn-primary self-start sm:self-auto">Talk with us </Link>
       </div></div></section>
     </>
   );

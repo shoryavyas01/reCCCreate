@@ -15,7 +15,7 @@ export const policyUpdated = "19 November 2026";
 export const socialImage = { url: "/social/recccreate-share.png", width: 1200, height: 630, alt: "ReCCCreate: temple flowers remade as rangoli colour and compost in Jaipur" };
 export function pageMetadata(title: string, description: string, path: string): Metadata {
   return {
-    title, description,
+    title: { absolute: `${title} | ${siteName}` }, description,
     alternates: { canonical: path },
     openGraph: { title: `${title} | ${siteName}`, description, url: new URL(path, siteUrl), siteName, locale: "en_IN", type: "website", images: [socialImage] },
     twitter: { card: "summary_large_image", title: `${title} | ${siteName}`, description, images: [socialImage.url] },
