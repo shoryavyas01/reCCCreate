@@ -1,4 +1,4 @@
-import type { BatchTrace, Impact, Product, TempleWithTotal } from "./types";
+import type { BatchTrace, Product, TempleWithTotal } from "./types";
 
 /* Sample data shown only while Supabase is not connected.
    None of it is real: pages that use it show a "Sample data" notice. */
@@ -9,26 +9,19 @@ export const sampleTemples: TempleWithTotal[] = [
   { id: "sample-3", name: "Sample temple three", area: "Area, Jaipur", photo_url: null, collecting_since: "2026-10-08", kg_collected: 9 },
 ];
 
-export const sampleImpact: Impact = {
-  kgCollected: 69,
-  gulaalKg: 6,
-  projectedKgPerYear: 2099,
-};
-
 export const sampleProducts: Product[] = [
-  { id: "sample-gulaal-yellow", name: "Marigold yellow gulaal", type: "gulaal", price_inr: 0, size: "100 g pouch", photo_url: null, ingredients: "Dried marigold petals, cornflour", in_stock: true },
-  { id: "sample-gulaal-pink", name: "Rose pink gulaal", type: "gulaal", price_inr: 0, size: "100 g pouch", photo_url: null, ingredients: "Dried rose petals, cornflour", in_stock: true },
-  { id: "sample-compost", name: "Flower compost", type: "compost", price_inr: 0, size: "1 kg pack", photo_url: null, ingredients: "Composted temple flowers", in_stock: true },
+  { id: "sample-rangoli-kesar", name: "Kesar Kyari rangoli colour", type: "gulaal", price_inr: 0, size: "Paper pouch", photo_url: "/images/products/kesar-kyari.webp", ingredients: "Flower-based colour for rangoli and decorative use. Ask the team for full ingredient details.", in_stock: true },
+  { id: "sample-compost", name: "Temple Bloom flower compost", type: "compost", price_inr: 0, size: "Paper pouch", photo_url: "/images/products/temple-bloom.webp", ingredients: "Compost made from collected temple flowers.", in_stock: true },
 ];
 
 export const sampleBatch: BatchTrace = {
   id: "sample",
-  product_id: "sample-gulaal-yellow",
+  product_id: "sample-rangoli-kesar",
   temple_id: "sample-1",
   collected_on: "2026-10-10",
   kg_flowers_used: 5,
   kg_produced: 0.5,
   made_by: "Aryaman, Shubhi, Paridhi, Kushagra",
-  product: { name: "Marigold yellow gulaal", type: "gulaal", size: "100 g pouch" },
+  product: { name: "Kesar Kyari rangoli colour", type: "gulaal", size: "Paper pouch" },
   temple: { name: "Sample temple one", area: "Area, Jaipur" },
 };

@@ -36,9 +36,3 @@ export type BatchTrace = Batch & {
   product: Pick<Product, "name" | "type" | "size"> | null;
   temple: Pick<Temple, "name" | "area"> | null;
 };
-
-export type Impact = {
-  kgCollected: number;
-  gulaalKg: number;
-  projectedKgPerYear: number | null;
-};

@@ -5,34 +5,34 @@ import BatchLookup from "@/components/BatchLookup";
 import FlowerJourney from "@/components/FlowerJourney";
 import PhotoPanel from "@/components/PhotoPanel";
 import SampleNotice from "@/components/SampleNotice";
-import { getImpact, getTemples } from "@/lib/data";
+import { getTemples } from "@/lib/data";
+import { publishedImpact } from "@/lib/impact";
 import { formatDate, formatKg } from "@/lib/format";
 
 export const revalidate = 60;
 
 const questions = [
-  { question: "What happens to the temple flowers?", answer: "We collect and weigh flowers from partner temples. Petals are sorted, sun-dried and ground for gulaal. Surplus flowers go to a compost unit." },
+  { question: "What happens to the temple flowers?", answer: "We collect and weigh flowers from partner temples. Petals are sorted, sun-dried and ground for rangoli colour. Surplus flowers go to a compost unit." },
   { question: "How do I place an order?", answer: "Choose a product in the shop and send an order request. The team will call to confirm availability, price and delivery. Payment is by UPI on delivery; no online payment is collected here." },
   { question: "Can my temple or school take part?", answer: "Yes. Use the contact form to tell us your location and how you would like to help. We will discuss collection arrangements with you. A temple is named publicly only after giving permission." },
   { question: "How can I trace a pack?", answer: "Scan the QR code on the packaging, or enter its batch ID below. The batch page shows the recorded source, collection date, flowers used and the people who made it. The sample batch illustrates this without claiming a real origin." },
 ];
 
 export default async function Home() {
-  const [temples, impact] = await Promise.all([getTemples(), getImpact()]);
+  const temples = await getTemples();
   const tiles = [
-    { value: `${formatKg(impact.data.kgCollected)}`, unit: "kg", label: "Flowers collected" },
-    { value: `${formatKg(impact.data.gulaalKg)}`, unit: "kg", label: "Gulaal made" },
-    { value: impact.data.projectedKgPerYear === null ? "—" : formatKg(impact.data.projectedKgPerYear), unit: impact.data.projectedKgPerYear === null ? "" : "kg / year", label: "Projected collection" },
+    { value: formatKg(publishedImpact.flowersRecycledKg), unit: "kg", label: "Flowers collected & recycled" },
+    { value: publishedImpact.rangoliPackets.toLocaleString("en-IN"), unit: "packets", label: "Rangoli colour made" },
   ];
   return <>
     <section className="hero-section">
       <div className="container-site hero-grid">
         <div className="hero-intro">
           <p className="eyebrow mb-7">ReCCCreate · Bhankrota, Jaipur</p>
-          <h1 className="hero-title">Temple flowers.<br /><span className="display-accent">Festival colours.</span></h1>
-          <p className="body-copy hero-summary mt-7">Collected from Jaipur temples. Sorted by our student team. Remade as natural gulaal and compost.</p>
-          <div className="mt-8 flex flex-wrap gap-3"><Link href="/shop" className="btn btn-primary">Explore our gulaal & compost <span aria-hidden="true">↗</span></Link><Link href="#journey-heading" className="btn btn-text">See how it’s made <span aria-hidden="true">↓</span></Link></div>
-          <div className="hero-signature"><span className="hero-signature-mark" aria-hidden="true">✳</span><p>A student venture.<br /><span>Rooted in Bhankrota, Jaipur.</span></p></div>
+          <h1 className="hero-title">Temple flowers.<br /><span className="display-accent">Rangoli colours.</span></h1>
+          <p className="body-copy hero-summary mt-7">Collected from Jaipur temples. Sorted by our student team. Remade as rangoli colour and compost.</p>
+          <div className="mt-8 flex flex-wrap gap-3"><Link href="/shop" className="btn btn-primary">Explore our rangoli colours & compost <span aria-hidden="true">↗</span></Link><Link href="#journey-heading" className="btn btn-text">See how it’s made <span aria-hidden="true">↓</span></Link></div>
+          <div className="hero-signature"><span className="hero-signature-mark" aria-hidden="true">✳</span><p>A student venture.<br /><span>Rooted in Dharav High School.</span></p></div>
         </div>
         <div className="hero-art-wrap">
           <BotanicalMotif className="hero-botanical" />
@@ -45,30 +45,29 @@ export default async function Home() {
         </div>
       </div>
     </section>
-    <div className="cycle-ribbon" aria-label="Credit, Community, Change"><div className="container-site cycle-ribbon-inner"><span>Temple flowers</span><span aria-hidden="true">✳</span><span>Student hands</span><span aria-hidden="true">✳</span><span>Natural gulaal</span><span aria-hidden="true">✳</span><span>Flower compost</span></div></div>
+    <div className="cycle-ribbon" aria-label="Credit, Community, Change"><div className="container-site cycle-ribbon-inner"><span>Temple flowers</span><span aria-hidden="true">✳</span><span>Student hands</span><span aria-hidden="true">✳</span><span>Rangoli colour</span><span aria-hidden="true">✳</span><span>Flower compost</span></div></div>
 
     <section className="section story-section" data-reveal><div className="container-site story-grid">
       <div><p className="eyebrow mb-5">The idea, close to home</p><h2>An offering is precious.<br />Even <span className="display-accent">after the prayer.</span></h2></div>
-      <div className="story-copy"><p className="body-copy">Every morning, flowers offered at temples have already served a purpose. We collect them while they still have something to give.</p><p className="body-copy mt-4">We are students at Dharav High School in Bhankrota. Our work is practical: weigh the flowers, sort the petals, dry and grind them for gulaal, and send surplus to compost.</p><Link href="/about" className="journey-link mt-6">Meet the people behind it <span aria-hidden="true">↗</span></Link></div>
+      <div className="story-copy"><p className="body-copy">Every morning, flowers offered at temples have already served a purpose. We collect them while they still have something to give.</p><p className="body-copy mt-4">We are students at Dharav High School in Bhankrota. Our work is practical: weigh the flowers, sort the petals, dry and grind them for rangoli colour, and send surplus to compost.</p><Link href="/about" className="journey-link mt-6">Meet the people behind it <span aria-hidden="true">↗</span></Link></div>
     </div></section>
 
     <FlowerJourney />
 
     <section className="section collection-section" data-reveal><div className="container-site">
-      <div className="section-heading"><div><p className="eyebrow mb-4">Two ways to begin again</p><h2>Made for Holi.<br /><span className="display-accent">And for the earth.</span></h2></div><Link href="/shop" className="btn btn-secondary">Visit the shop ↗</Link></div>
+      <div className="section-heading"><div><p className="eyebrow mb-4">Two ways to begin again</p><h2>Made for rangoli.<br /><span className="display-accent">And for the earth.</span></h2></div><Link href="/shop" className="btn btn-secondary">Visit the shop ↗</Link></div>
       <div className="collection-grid">
-        <Link href="/shop?type=gulaal" className="collection-panel collection-colour"><div className="collection-illustration"><div className="colour-specimen"><span className="specimen-number">01</span><div className="pigment pigment-one" /><div className="pigment pigment-two" /><span className="specimen-caption">MARIGOLD & ROSE<br />PETAL COLOURS</span></div><BotanicalMotif className="collection-flower" /><span className="collection-art-label">THE COLOUR COLLECTION</span></div><div className="collection-panel-copy"><div><p className="eyebrow mb-3">01 / The colours</p><h3>Natural gulaal</h3><p>Temple petals, dried and ground for another celebration.</p></div><span className="collection-arrow" aria-hidden="true">↗</span></div></Link>
-        <Link href="/shop?type=compost" className="collection-panel collection-soil"><div className="collection-illustration"><BotanicalMotif className="soil-flower" variant="sprout" /><div className="soil-lines" /><span className="collection-art-label">BACK TO THE EARTH</span></div><div className="collection-panel-copy"><div><p className="eyebrow mb-3">02 / The soil</p><h3>Flower compost</h3><p>Surplus blooms find their way back to the growing cycle.</p></div><span className="collection-arrow" aria-hidden="true">↗</span></div></Link>
+        <Link href="/shop?type=rangoli" className="collection-panel collection-colour"><div className="collection-product-image"><Image src="/images/products/kesar-kyari.webp" alt="Kesar Kyari rangoli colour pouches, front and back" fill sizes="(max-width: 767px) 100vw, 50vw" /></div><div className="collection-panel-copy"><div><p className="eyebrow mb-3">The colours</p><h3>Kesar Kyari</h3><p>Flower-based rangoli colour for patterns, decoration and celebrations.</p></div></div></Link>
+        <Link href="/shop?type=compost" className="collection-panel collection-soil"><div className="collection-product-image"><Image src="/images/products/temple-bloom.webp" alt="Temple Bloom temple flower compost pouch" fill sizes="(max-width: 767px) 100vw, 50vw" /></div><div className="collection-panel-copy"><div><p className="eyebrow mb-3">The soil</p><h3>Temple Bloom</h3><p>Temple flower compost that returns surplus blooms to the growing cycle.</p></div></div></Link>
       </div>
-      <p className="art-note mt-4">Botanical illustrations. Product details and availability are in the shop.</p>
+      <p className="art-note mt-4">Rangoli colour and temple flower compost. Product details and availability are in the shop.</p>
     </div></section>
 
     <section className="section-tight" data-reveal aria-labelledby="impact-heading"><div className="container-site"><div className="impact-panel">
       <BotanicalMotif className="impact-flower" />
-      <div className="impact-intro"><p className="eyebrow eyebrow-light mb-5">The collection ledger</p><h2 id="impact-heading">What we’ve <em>collected.</em></h2><p className="impact-copy mt-5">Our progress, from the collection ledger.</p></div>
-      {impact.sample && <div className="mt-6"><SampleNotice /></div>}
+      <div className="impact-intro"><p className="eyebrow eyebrow-light mb-5">Our progress</p><h2 id="impact-heading">Collected.<br /><em>Made useful again.</em></h2><p className="impact-copy mt-5">Temple flowers recycled and rangoli colour packed by our student team.</p></div>
       <ul className="impact-stats">{tiles.map((tile, i) => <li key={tile.label} className="impact-stat"><span className="impact-index">0{i + 1}</span><p className="impact-value">{tile.value} <small>{tile.unit}</small></p><p className="impact-label">{tile.label}</p></li>)}</ul>
-      <p className="impact-footnote">Yearly projection: average daily collection across the full recorded date range × 365. An estimate, not a measured result.</p>
+      <p className="impact-footnote">Project totals updated {formatDate(publishedImpact.updatedOn)}.</p>
     </div></div></section>
 
     <section className="section temples-section" data-reveal aria-labelledby="temples-heading"><div className="container-site">
