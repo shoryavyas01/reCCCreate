@@ -118,3 +118,10 @@ Page introductions and paired sections use equal-width columns and one shared gu
 - Shiv Mandir, Rangoli Road: the exact temple could not be verified in public image sources. A typographic panel is used until the team supplies its photograph or exact Maps listing.
 
 The team inbox `recccreate@gmail.com` is transcribed from the supplied Kesar Kyari packaging. Never add placeholder phone numbers from packaging artwork.
+
+
+### Buying enquiries and current MRP
+
+Both rangoli colours have MRP ₹20; Temple Bloom flower compost has MRP ₹50. Prices and contact product options come from `src/lib/catalogue.ts`. The Kesar Kyari back photograph has been corrected to ₹20 and uses a new asset filename to avoid stale image caches.
+
+Choosing Buying on Contact reveals a required Product selector. The selected product and current MRP are included in the email draft and the Sheet’s About column, preserving compatibility with the deployed version-2 script and keeping the complete Message column intact. Other topics discard hidden product selections.
