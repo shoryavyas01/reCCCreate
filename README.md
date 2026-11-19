@@ -94,7 +94,8 @@ In `/admin` > Batches, each batch has a **QR code** button that downloads a PNG 
 The visual system draws on Jaipur floral block prints and architectural arches: paper, sandstone, marigold and botanical green, with original vector ornaments. Fonts are bundled locally with their SIL Open Font License files; builds do not contact Google Fonts. The homepage introduces the flower cycle, collection, recorded impact, temple partners, batch lookup and practical FAQs.
 
 - Product filters support `/shop?type=rangoli` and `/shop?type=compost`; older colour-category links still work. Choosing a product selects it in the request form and shows the product subtotal when a price is published.
-- Sample products cannot be ordered. Missing form credentials show an unavailable state; setup details stay out of public notices.
+- The product catalogue in `src/lib/catalogue.ts` includes the team-supplied Kesar Kyari, Sunheri Subah and Temple Bloom imagery and label information. Rangoli pouches have separate front/back views, ingredients, usage instructions and details of the photographed pack. Label MRPs are displayed for catalogue previews; batch dates describe the pack shown. Live database product IDs, prices and stock remain authoritative when connected.
+- Without a live catalogue connection, products link to contact enquiries and online order submission remains disabled. Missing form credentials show an unavailable state; setup details stay out of public notices.
 - Forms prevent duplicate submissions, preserve entries after failures and stop waiting after 15 seconds. A timeout warns that delivery may be uncertain.
 - Loading, route retry, root error and missing-page states match the design. Batch IDs are validated before querying.
 - Section entrances, the moving cycle path and botanical movement respect reduced-motion preferences. Mobile navigation closes on Escape and outside clicks.

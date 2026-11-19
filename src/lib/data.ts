@@ -1,5 +1,6 @@
 import { getSupabase } from "./supabase";
-import { sampleBatch, sampleProducts, sampleTemples } from "./placeholder";
+import { sampleBatch, sampleTemples } from "./placeholder";
+import { catalogueProducts } from "./catalogue";
 import { normaliseProduct, productDisplayName } from "./products";
 import type { BatchTrace, Product, TempleWithTotal } from "./types";
 
@@ -16,7 +17,7 @@ export async function getTemples(): Promise<{ data: TempleWithTotal[]; sample: b
 
 export async function getProducts(): Promise<{ data: Product[]; sample: boolean }> {
   const db = getSupabase();
-  if (!db) return { data: sampleProducts, sample: true };
+  if (!db) return { data: catalogueProducts, sample: true };
   const { data, error } = await db.from("products").select("*").order("type", { ascending: false }).order("name");
   if (error) throw new Error(`Could not load products: ${error.message}`);
   return { data: (data ?? []).map(normaliseProduct), sample: false };

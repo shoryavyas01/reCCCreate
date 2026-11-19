@@ -51,6 +51,26 @@ button,summary { cursor:pointer; }
 .process-closing > p { flex:1 1 20rem; max-width:35rem; font-size:1rem; color:var(--muted); }
 .process-actions { display:flex; flex-wrap:wrap; gap:.75rem; }
 .product-card > figure { border:0; }
+.product-gallery > figure { border:0; background:#e8d2b5; }
+.product-gallery-controls { display:flex; min-height:3rem; align-items:stretch; justify-content:center; border-block:1px solid var(--line); background:#e8d2b5; }
+.product-gallery-controls button,.product-gallery-controls > span { flex:1; padding:.7rem; border:0; background:transparent; color:var(--ink); font:inherit; font-size:.875rem; text-align:center; }
+.product-gallery-controls button + button { border-left:1px solid var(--line); }
+.product-gallery-controls button[aria-pressed="true"] { background:var(--forest); color:#fffaf0; font-weight:600; }
+.product-details { margin-block:1.25rem; border-top:1px solid var(--line); }
+.product-details summary { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding-block:1rem; list-style:none; font-size:1rem; font-weight:600; }
+.product-details summary::-webkit-details-marker { display:none; }
+.product-details summary > span { font-size:1.4rem; transition:transform .2s; }
+.product-details[open] summary > span { transform:rotate(45deg); }
+.product-details-body { display:grid; gap:1.25rem; padding-bottom:1rem; font-size:.9375rem; line-height:1.8; color:var(--muted); }
+.product-details-body h4 { margin-bottom:.5rem; font-weight:600; color:var(--ink); }
+.product-details-body ol { list-style:decimal; padding-left:1.25rem; }
+.product-details-body ol li + li { margin-top:.3rem; }
+.product-details-body dl > div { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.35fr); gap:.75rem; padding-block:.5rem; border-top:1px solid var(--line); }
+.product-details-body dt { font-weight:500; }
+.product-details-body dd { overflow-wrap:anywhere; }
+.product-use-note { margin-top:.75rem; }
+.product-ingredients { margin-bottom:1rem; }
+.catalogue-note { max-width:50rem; margin-bottom:1.5rem; font-size:1rem; line-height:1.8; color:var(--muted); }
 .product-card h3 { min-height:2.7em; }
 .product-actions { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:.75rem; min-height:3.25rem; }
 .product-actions > p { overflow-wrap:anywhere; }
