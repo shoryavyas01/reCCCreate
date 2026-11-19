@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { getSupabase } from "@/lib/supabase";
+import { productDisplayName } from "@/lib/products";
 import ResourceManager, { type Field, type Option } from "./ResourceManager";
 
 type Tab = "temples" | "collections" | "batches" | "products";
@@ -64,7 +65,7 @@ export default function AdminApp() {
       setTemples((data ?? []).map((t) => ({ value: t.id, label: t.name }))),
     );
     db.from("products").select("id, name, size").order("name").then(({ data }) =>
-      setProducts((data ?? []).map((p) => ({ value: p.id, label: `${p.name} (${p.size})` }))),
+      setProducts((data ?? []).map((p) => ({ value: p.id, label: `${productDisplayName(p.name)} (${p.size})` }))),
     );
   }, [db, isAdmin, tab]);
 
@@ -139,7 +140,7 @@ export default function AdminApp() {
     ],
     products: [
       { key: "name", label: "Name", type: "text", required: true },
-      { key: "type", label: "Type", type: "select", required: true, options: [{ value: "gulaal", label: "Gulaal" }, { value: "compost", label: "Compost" }] },
+      { key: "type", label: "Type", type: "select", required: true, options: [{ value: "gulaal", label: "Rangoli colour" }, { value: "compost", label: "Compost" }] },
       { key: "price_inr", label: "Price (₹)", type: "number", required: true },
       { key: "size", label: "Size", type: "text", required: true },
       { key: "photo_url", label: "Photo", type: "photo" },

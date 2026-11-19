@@ -15,13 +15,13 @@ const stages = [
     label: "Reimagine",
     eyebrow: "02 · TRANSFORM",
     title: "Sun-dried. Then ground.",
-    description: "Sorted, sun-dried petals are ground into natural gulaal—a new form for flowers offered with meaning.",
+    description: "Sorted, sun-dried petals are ground into rangoli colour—a new form for flowers offered with meaning.",
   },
   {
     label: "Return",
     eyebrow: "03 · GIVE BACK",
     title: "The rest returns to soil.",
-    description: "Petals not used for gulaal are directed to a compost unit, completing another part of the cycle.",
+    description: "Petals not used for rangoli colour are directed to a compost unit, completing another part of the cycle.",
   },
 ] as const;
 
@@ -52,7 +52,7 @@ export default function FlowerJourney() {
             <BotanicalMotif className="absolute w-28 journey-flower" />
             <svg className="journey-diagram" viewBox="0 0 520 360" role="img" aria-labelledby="journey-diagram-title journey-diagram-desc">
               <title id="journey-diagram-title">Three steps in the ReCCCreate flower cycle</title>
-              <desc id="journey-diagram-desc">A curved path links flower collection, natural gulaal, and compost from surplus petals.</desc>
+              <desc id="journey-diagram-desc">A curved path links flower collection, rangoli colour, and compost from surplus petals.</desc>
               <path className="journey-path" d="M92 182 C130 18 390 18 428 182 C390 346 130 346 92 182Z" />
               {nodePositions.map((position, index) => (
                 <g key={stages[index].label} className={`journey-node ${activeStage === index ? "is-active" : ""}`} transform={`translate(${position.x} ${position.y})`}>

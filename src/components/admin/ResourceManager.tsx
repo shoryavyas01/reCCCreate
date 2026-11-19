@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import QRCode from "qrcode";
+import { productDisplayName } from "@/lib/products";
 
 export type Option = { value: string; label: string };
 export type Field = {
@@ -129,6 +130,7 @@ export default function ResourceManager({
     if (f.type === "checkbox") return v ? "Yes" : "No";
     if (f.type === "select") return f.options?.find((o) => o.value === v)?.label ?? "";
     if (f.type === "photo") return v ? "Yes" : "None";
+    if (table === "products" && f.key === "name") return productDisplayName(String(v ?? ""));
     return v ?? "";
   };
 
@@ -138,7 +140,9 @@ export default function ResourceManager({
         <h2 className="text-[22px]">{editing ? "Edit entry" : "Add new"}</h2>
         {fields.map((f) => {
           const id = `${table}-${f.key}`;
-          const value = editing?.[f.key];
+          const value = table === "products" && f.key === "name"
+            ? productDisplayName(String(editing?.[f.key] ?? ""))
+            : editing?.[f.key];
           if (f.type === "checkbox")
             return (
               <label key={f.key} className="flex items-center gap-3 font-extrabold">

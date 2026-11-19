@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     template: "%s | ReCCCreate",
   },
   description:
-    "A student-led circularity project in Jaipur, turning temple-offered flowers into natural gulaal and compost. Credit. Community. Change.",
+    "A student-led circularity project in Jaipur, turning temple-offered flowers into rangoli colour and compost. Credit. Community. Change.",
   applicationName: "ReCCCreate",
   openGraph: {
     title: "ReCCCreate — A second life for temple flowers",

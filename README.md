@@ -2,7 +2,7 @@
 
 *CCC stands for Credit. Community. Change.*
 
-Website for a student venture that collects flowers offered at Jaipur temples and turns them into natural gulaal and compost. Built with Next.js (App Router), TypeScript, Tailwind CSS, Supabase and Web3Forms.
+Website for a student venture at Dharav High School that collects flowers offered at Jaipur temples and turns them into rangoli colour and compost. Built with Next.js (App Router), TypeScript, Tailwind CSS, Supabase and Web3Forms.
 
 ## Run it on your computer
 
@@ -64,11 +64,11 @@ The first sign-up creates a tab called **Sign-ups** with the header row. "Anyone
 | Bundled fonts (Montserrat and DM Serif Display) | `public/fonts` and `src/app/layout.tsx` |
 | Database tables and security rules | `supabase/schema.sql` |
 
-## How the figures are worked out
+## Published impact figures
 
-- **Flowers collected so far:** the sum of every row in `collections`.
-- **Gulaal made so far:** the sum of `kg_produced` over gulaal batches.
-- **Projected kg a year:** average kg per day × 365. The average covers every day from the first collection to the last, so days with no pickup count as zero.
+The homepage uses the team-supplied totals in `src/lib/impact.ts`: **467 kg of flowers collected and recycled** and **560 rangoli colour packets**, updated 19 November 2026. Update that file when the team publishes new totals. Packet counts are separate from batch kilograms; the homepage does not convert one to the other or estimate an annual total.
+
+Product labels now say rangoli colour. Existing database category keys and saved product IDs remain compatible; display names are normalized in `src/lib/products.ts`, including names returned for batch tracing. Supabase collection and batch records remain separate from the published impact snapshot.
 
 ## QR codes
 
@@ -93,7 +93,7 @@ In `/admin` > Batches, each batch has a **QR code** button that downloads a PNG 
 
 The visual system draws on Jaipur floral block prints and architectural arches: paper, sandstone, marigold and botanical green, with original vector ornaments. Fonts are bundled locally with their SIL Open Font License files; builds do not contact Google Fonts. The homepage introduces the flower cycle, collection, recorded impact, temple partners, batch lookup and practical FAQs.
 
-- Product filters support `/shop?type=gulaal` and `/shop?type=compost`. Choosing a product selects it in the request form and shows the product subtotal when a price is published.
+- Product filters support `/shop?type=rangoli` and `/shop?type=compost`; older colour-category links still work. Choosing a product selects it in the request form and shows the product subtotal when a price is published.
 - Sample products cannot be ordered. Missing form credentials show an unavailable state; setup details stay out of public notices.
 - Forms prevent duplicate submissions, preserve entries after failures and stop waiting after 15 seconds. A timeout warns that delivery may be uncertain.
 - Loading, route retry, root error and missing-page states match the design. Batch IDs are validated before querying.

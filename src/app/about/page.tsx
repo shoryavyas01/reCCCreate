@@ -89,7 +89,7 @@ export default function About() {
         <div className="process-closing">
           <p>Made for rangoli and decorative use. Explore the colours, or help us collect the next basket of flowers.</p>
           <div className="process-actions">
-            <Link href="/shop?type=gulaal" className="btn btn-primary">Explore the colours</Link>
+            <Link href="/shop?type=rangoli" className="btn btn-primary">Explore the colours</Link>
             <Link href="/phool-mitra" className="btn btn-secondary">Join a collection</Link>
           </div>
         </div>
