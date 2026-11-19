@@ -1,4 +1,5 @@
 import type { Product } from "./types";
+import { catalogueProducts } from "./catalogue";
 
 // Keep the existing database category key compatible with saved products.
 // Visitors and admins see the current product name everywhere.
@@ -11,7 +12,16 @@ export function productDisplayName(name: string): string {
 }
 
 export function normaliseProduct(product: Product): Product {
-  return { ...product, name: productDisplayName(product.name) };
+  const name = productDisplayName(product.name);
+  const catalogue = catalogueProducts.find((item) =>
+    name.toLowerCase().includes(item.name.replace(/ rangoli colour| flower compost/g, "").toLowerCase()),
+  );
+  return {
+    ...product,
+    name,
+    images: product.images ?? catalogue?.images,
+    details: product.details ?? catalogue?.details,
+  };
 }
 
 export function shopFilter(value: string | undefined): "all" | Product["type"] {

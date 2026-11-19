@@ -1,12 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { productTypeLabel } from "@/lib/products";
 import BotanicalMotif from "./BotanicalMotif";
-import PhotoPanel from "./PhotoPanel";
+import ProductGallery from "./ProductGallery";
+import ProductDetails from "./ProductDetails";
 import FormShell from "./FormShell";
-import SampleNotice from "./SampleNotice";
 
 type Filter = "all" | "gulaal" | "compost";
 export default function ShopExperience({ products, sample, initialFilter }: { products: Product[]; sample: boolean; initialFilter: Filter }) {
@@ -17,7 +18,7 @@ export default function ShopExperience({ products, sample, initialFilter }: { pr
   const available = products.filter((p) => p.in_stock);
   const visible = products.filter((p) => filter === "all" || p.type === filter);
   const product = available.find((p) => p.id === selected);
-  const reason = sample ? "These are sample products. Orders open once the team publishes the live collection." : available.length === 0 ? "Orders are paused while products are out of stock. Please check back soon." : undefined;
+  const reason = sample ? "Online order requests are not open yet. Please contact the team for availability." : available.length === 0 ? "Orders are paused while products are out of stock. Please check back soon." : undefined;
   function choose(id: string) {
     setSelected(id);
     setQuantity(1);
@@ -28,12 +29,12 @@ export default function ShopExperience({ products, sample, initialFilter }: { pr
   return <>
     <section className="section-tight bg-[#d5b57d]" aria-labelledby="products-heading"><div className="container-site">
       <div className="section-heading"><div><p className="eyebrow mb-4">The collection</p><h2 id="products-heading">Colour and care,<br /><span className="display-accent">from the same petals.</span></h2></div><p className="max-w-xs text-sm leading-7 text-[#4e503a]">Local order requests. The team confirms price, availability and delivery before you pay.</p></div>
-      {sample && <SampleNotice />}
+      {sample && <p className="catalogue-note">Explore the collection. Contact the team to confirm availability and place an order.</p>}
       <div className="shop-filters" role="group" aria-label="Filter products">{(["all", "gulaal", "compost"] as Filter[]).map((value) => <button type="button" className="filter-button" aria-pressed={filter === value} key={value} onClick={() => setFilter(value)}>{value === "all" ? "All products" : value === "gulaal" ? "Rangoli colour" : "Flower compost"}</button>)}</div>
       <p className="sr-only" aria-live="polite">{visible.length} products shown</p>
       {visible.length === 0 ? <div className="card p-8"><h3>{products.length ? "No products in this collection yet." : "Our collection is being prepared."}</h3><p className="body-copy mt-3">Check back soon or contact the team for availability.</p>{filter !== "all" && <button className="btn btn-secondary mt-5" onClick={() => setFilter("all")}>Show all products</button>}</div> : <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{visible.map((item) => <li key={item.id} className="product-card flex flex-col border border-black/15 bg-[#ecd4a9]">
-        {item.photo_url ? <PhotoPanel src={item.photo_url} alt={item.name} ratio="aspect-[4/3]" fit="contain" /> : <div className={`product-placeholder ${item.type === "compost" ? "compost" : item.name.toLowerCase().includes("rose") ? "rose" : ""}`}><BotanicalMotif className="product-botanical" variant={item.type === "compost" ? "sprout" : "marigold"} /><span className="product-art-label">Botanical illustration · {productTypeLabel(item.type)}</span></div>}
-        <div className="flex flex-1 flex-col p-6"><p className="eyebrow">{productTypeLabel(item.type)} · {item.size}</p><h3 className="mt-3 font-display text-3xl font-normal">{item.name}</h3><p className="mt-3 flex-1 text-sm leading-7 text-[#4e503a]">{item.ingredients || "Ask the team for ingredient details."}</p><div className="product-actions mt-5 border-t border-black/15 pt-5"><p className="text-base font-medium">{item.price_inr > 0 ? `₹${item.price_inr.toLocaleString("en-IN")}` : "Price on request"}</p>{item.in_stock ? <button className="btn btn-primary min-h-10 px-4 py-2" onClick={() => choose(item.id)} aria-label={`${sample ? "View" : "Order"} ${item.name}`}>{sample ? "View sample" : "Request order"} ↗</button> : <span className="text-xs text-[#4e503a]">Out of stock</span>}</div></div>
+        {item.images?.length || item.photo_url ? <ProductGallery name={item.name} images={item.images?.length ? item.images : [{ src: item.photo_url!, label: "Front", alt: item.name }]} /> : <div className={`product-placeholder ${item.type === "compost" ? "compost" : item.name.toLowerCase().includes("rose") ? "rose" : ""}`}><BotanicalMotif className="product-botanical" variant={item.type === "compost" ? "sprout" : "marigold"} /><span className="product-art-label">Botanical illustration · {productTypeLabel(item.type)}</span></div>}
+        <div className="flex flex-1 flex-col p-6"><p className="eyebrow">{productTypeLabel(item.type)} · {item.size}</p><h3 className="mt-3 font-display text-3xl font-normal">{item.name}</h3><p className="product-ingredients mt-3 text-sm leading-7 text-[#4e503a]"><strong>Ingredients:</strong> {item.ingredients || "Ask the team for ingredient details."}</p><ProductDetails product={item} /><div className="product-actions mt-auto border-t border-black/15 pt-5"><p className="text-base font-medium">{item.price_inr > 0 ? `${sample ? "MRP " : ""}₹${item.price_inr.toLocaleString("en-IN")}` : "Price on request"}</p>{item.in_stock ? sample ? <Link href="/contact" className="btn btn-primary min-h-10 px-4 py-2" aria-label={`Enquire about ${item.name}`}>Enquire</Link> : <button className="btn btn-primary min-h-10 px-4 py-2" onClick={() => choose(item.id)} aria-label={`Order ${item.name}`}>Request order</button> : <span className="text-xs text-[#4e503a]">Out of stock</span>}</div></div>
       </li>)}</ul>}
     </div></section>
     <section ref={order} id="order" className="section" aria-labelledby="order-heading"><div className="container-site two-column">

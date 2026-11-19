@@ -20,6 +20,13 @@ export type Product = {
   photo_url: string | null;
   ingredients: string | null;
   in_stock: boolean;
+  images?: { src: string; label: "Front" | "Back"; alt: string }[];
+  details?: {
+    shade?: string;
+    howToUse?: string[];
+    pack?: { label: string; value: string }[];
+    madeBy?: string;
+  };
 };
 
 export type Batch = {
