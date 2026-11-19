@@ -21,6 +21,7 @@ export function normaliseProduct(product: Product): Product {
     name,
     images: product.images ?? catalogue?.images,
     details: product.details ?? catalogue?.details,
+    traceId: product.traceId ?? catalogue?.traceId,
   };
 }
 

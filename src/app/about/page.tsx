@@ -1,19 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { team } from "@/lib/team";
 
 export const metadata: Metadata = {
   title: "Our story",
   description: "Meet the students behind ReCCCreate and discover how temple flowers find a second life in Jaipur.",
 };
 
-const team = [
-  { name: "Paridhi Sharma", photo: "paridhi-sharma" },
-  { name: "Kushagra Somani", photo: "kushagra-somani" },
-  { name: "Shubhi Pareek", photo: "shubhi-pareek" },
-  { name: "Shorya Vyas", photo: "shorya-vyas" },
-  { name: "Aryaman Pandey", photo: "aryaman-pandey" },
-];
 const steps = [
   {
     stage: "Collect",
@@ -98,7 +92,7 @@ export default function About() {
       <section className="section" aria-labelledby="team-heading"><div className="container-site">
         <div className="two-column">
           <div><p className="eyebrow mb-4">The people behind the petals</p><h2 id="team-heading">A student team, learning by doing.</h2></div>
-          <p className="body-copy">We are building ReCCCreate together at Dharav High School. Our work spans temple collections, processing, packaging and sharing products with the community.</p>
+          <p className="body-copy">We are building ReCCCreate together at Dharav High School, Bhankrota, Jaipur. Our work spans temple collections, processing, packaging and sharing products with the community.</p>
         </div>
         <ul className="team-grid">
           {team.map((member) => (

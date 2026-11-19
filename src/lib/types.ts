@@ -7,7 +7,7 @@ export type Temple = {
   is_visible: boolean;
 };
 
-export type TempleWithTotal = Omit<Temple, "is_visible"> & { kg_collected: number };
+export type TempleWithTotal = Omit<Temple, "is_visible"> & { kg_collected: number | null; photo_credit?: string; photo_source?: string };
 
 export type Collection = { id: string; temple_id: string; date: string; kg: number };
 
@@ -21,6 +21,7 @@ export type Product = {
   ingredients: string | null;
   in_stock: boolean;
   images?: { src: string; label: "Front" | "Back"; alt: string }[];
+  traceId?: string;
   details?: {
     shade?: string;
     howToUse?: string[];

@@ -18,7 +18,7 @@ export default function BatchLookup() {
   }}>
     <label className="label" htmlFor="batch-lookup">Batch ID on your pack</label>
     <div className="batch-lookup-controls">
-      <input id="batch-lookup" name="batch" className="field" placeholder="e.g. sample" required maxLength={80} aria-invalid={Boolean(error)} aria-describedby={error ? "batch-error" : undefined} onChange={() => setError("")} />
+      <input id="batch-lookup" name="batch" className="field" placeholder="e.g. RG-601 or 1001" required maxLength={80} aria-invalid={Boolean(error)} aria-describedby={error ? "batch-error" : undefined} onChange={() => setError("")} />
       <button type="submit" className="btn btn-primary shrink-0">Trace my pack <span aria-hidden="true">↗</span></button>
     </div>
     {error && <p id="batch-error" role="alert" className="mt-3 text-sm text-error">{error}</p>}
