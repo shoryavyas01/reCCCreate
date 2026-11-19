@@ -19,6 +19,7 @@ export function normaliseProduct(product: Product): Product {
   return {
     ...product,
     name,
+    price_inr: catalogue?.price_inr ?? product.price_inr,
     images: product.images ?? catalogue?.images,
     details: product.details ?? catalogue?.details,
     traceId: product.traceId ?? catalogue?.traceId,

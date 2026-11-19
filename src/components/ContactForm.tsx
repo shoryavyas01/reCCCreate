@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { contactRoles, contactTopics, contactEmail, contactBody, contactDraft, validateContact, type ContactMessage } from "@/lib/contact";
+import { contactRoles, contactTopics, contactProducts, contactProductLabel, contactEmail, contactBody, contactDraft, validateContact, type ContactMessage } from "@/lib/contact";
 
 export default function ContactForm({ deliveryEnabled }: { deliveryEnabled: boolean }) {
+  const [topic, setTopic] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
@@ -27,7 +28,7 @@ export default function ContactForm({ deliveryEnabled }: { deliveryEnabled: bool
       const response = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(result.data), signal: AbortSignal.timeout(55000) });
       const outcome = await response.json().catch(() => null);
       if (!response.ok || outcome?.ok !== true) throw new Error(outcome?.error || "Your message was not sent. Please try again.");
-      setSent(true); form.reset();
+      setSent(true); setTopic(""); form.reset();
     } catch (problem) {
       setError(problem instanceof Error && problem.name !== "TimeoutError" ? problem.message : "Delivery timed out. It may have reached the team. Contact us by email before submitting again.");
       setDraft(result.data);
@@ -42,7 +43,8 @@ export default function ContactForm({ deliveryEnabled }: { deliveryEnabled: bool
     <fieldset disabled={sending} className="flex min-w-0 flex-col gap-5 border-0 p-0">
       <div className="form-row"><div><label className="label" htmlFor="contact-name">Name</label><input className="field" id="contact-name" name="name" required minLength={2} maxLength={100} autoComplete="name" /></div><div><label className="label" htmlFor="contact-email">Email</label><input className="field" id="contact-email" name="email" type="email" maxLength={254} required autoComplete="email" /></div></div>
       <div><label className="label" htmlFor="contact-phone">Phone (optional)</label><input className="field" id="contact-phone" name="phone" type="tel" maxLength={25} autoComplete="tel" /></div>
-      <div className="form-row"><div><label className="label" htmlFor="contact-role">I am a…</label><select className="field" id="contact-role" name="role" required defaultValue=""><option value="" disabled>Choose one</option>{contactRoles.map((role) => <option key={role}>{role}</option>)}</select></div><div><label className="label" htmlFor="contact-topic">What is this about?</label><select className="field" id="contact-topic" name="topic" required defaultValue=""><option value="" disabled>Choose one</option>{contactTopics.map((topic) => <option key={topic}>{topic}</option>)}</select></div></div>
+      <div className="form-row"><div><label className="label" htmlFor="contact-role">I am a…</label><select className="field" id="contact-role" name="role" required defaultValue=""><option value="" disabled>Choose one</option>{contactRoles.map((role) => <option key={role}>{role}</option>)}</select></div><div><label className="label" htmlFor="contact-topic">What is this about?</label><select className="field" id="contact-topic" name="topic" required value={topic} onChange={(event) => setTopic(event.target.value)}><option value="" disabled>Choose one</option>{contactTopics.map((topic) => <option key={topic}>{topic}</option>)}</select></div></div>
+      {topic === "Buying" && <div><label className="label" htmlFor="contact-product">Product</label><select className="field" id="contact-product" name="product" required defaultValue=""><option value="" disabled>Choose a product</option>{contactProducts.map((product) => <option key={product.id} value={product.id}>{contactProductLabel(product.id)}</option>)}</select></div>}
       <div><label className="label" htmlFor="contact-message">Message</label><textarea className="field min-h-40 resize-y" id="contact-message" name="message" rows={6} minLength={10} maxLength={5000} required placeholder="Tell us what you have in mind…" /></div>
       <input type="text" name="botcheck" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
       <button type="submit" className="btn btn-primary self-start">{sending ? "Sending…" : deliveryEnabled ? "Send message" : "Prepare email"} ↗</button>

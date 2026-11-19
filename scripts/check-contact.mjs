@@ -9,8 +9,9 @@ function load(file, dependencies = {}) {
   vm.runInNewContext(code, { exports, require: (id) => dependencies[id], Response, Request, URL, AbortSignal });
   return exports;
 }
-const contact = load('src/lib/contact.ts');
-const valid = { name: 'Website check', email: 'check@example.com', phone: '', role: 'Buyer', topic: 'Buying', message: 'Please share product availability.' };
+const catalogue = load('src/lib/catalogue.ts');
+const contact = load('src/lib/contact.ts', { './catalogue': catalogue });
+const valid = { name: 'Website check', email: 'check@example.com', phone: '', role: 'Buyer', topic: 'Buying', product: 'RG-601', message: 'Please share product availability.' };
 let calls = 0;
 let provider = 'success';
 const sheet = { sheetConfigured: false, saveToSheet: async (form, body) => {
@@ -19,6 +20,8 @@ const sheet = { sheetConfigured: false, saveToSheet: async (form, body) => {
   assert.equal(body.email, valid.email);
   assert.equal(body.role, valid.role);
   assert.equal(body.message, valid.message);
+  assert.match(body.topic, /Buying · Kesar Kyari rangoli colour \(MRP ₹20\)/);
+  assert.equal(body.product, valid.product);
   if (provider === 'timeout') throw new Error('Connection failed');
   return { saved: provider === 'success' };
 } };
@@ -27,7 +30,7 @@ const request = (body, origin = 'https://example.com') => new Request('https://e
 assert.equal((await route.POST(request(valid))).status, 503);
 assert.equal(calls, 0);
 sheet.sheetConfigured = true;
-for (const invalid of [null, [], { ...valid, email: 'invalid' }, { ...valid, message: 'short' }, { ...valid, role: 'Unknown' }, { ...valid, botcheck: 'spam' }]) {
+for (const invalid of [null, [], { ...valid, email: 'invalid' }, { ...valid, message: 'short' }, { ...valid, role: 'Unknown' }, { ...valid, botcheck: 'spam' }, { ...valid, product: '' }, { ...valid, product: 'unknown-product' }]) {
   assert.equal((await route.POST(request(invalid))).status, 400);
 }
 assert.equal((await route.POST(request(valid, 'https://elsewhere.example'))).status, 403);
@@ -39,8 +42,19 @@ provider = 'refused';
 assert.equal((await route.POST(request(valid))).status, 502);
 provider = 'timeout';
 assert.equal((await route.POST(request(valid))).status, 502);
+const other = contact.validateContact({ ...valid, topic: 'Partnering', product: 'RG-601' });
+assert.equal(other.data.product, '');
+for (const product of contact.contactProducts) {
+  const choice = contact.validateContact({ ...valid, product: product.id });
+  assert.equal(choice.data.product, product.id);
+  assert.match(contact.contactBody(choice.data), new RegExp(product.name));
+}
+assert.equal(catalogue.catalogueProducts[0].price_inr, 20);
+assert.equal(catalogue.catalogueProducts[1].price_inr, 20);
+assert.equal(catalogue.catalogueProducts[2].price_inr, 50);
 const draft = new URL(contact.contactDraft({ ...valid, message: 'Rangoli & flowers? A new line.\nThank you.' }));
+assert.match(draft.searchParams.get('body'), /Product: Kesar Kyari rangoli colour \(MRP ₹20\)/);
 assert.equal(draft.protocol, 'mailto:');
 assert.equal(draft.pathname, contact.contactEmail);
 assert.match(draft.searchParams.get('body'), /Rangoli & flowers\? A new line\.\nThank you\./);
-console.log('Contact checks passed: validation, honeypot, origin, missing setup, Sheet success, legacy fields, rejection, connection failure and encoded email draft. No external requests sent.');
+console.log('Contact checks passed: validation, honeypot, origin, missing setup, Sheet success, required Buying product, hidden-field clearing, legacy fields, rejection, connection failure and encoded email draft. No external requests sent.');
