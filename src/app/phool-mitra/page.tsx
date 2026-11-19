@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/site";
 import PhoolMitraForm from "@/components/PhoolMitraForm";
 import { sheetConfigured } from "@/lib/sheet";
 
-export const metadata: Metadata = { title: "Become a Phool Mitra", description: "Collect temple flowers near your home in Jaipur, bring them to a drop-off point, and earn credits for ReCCCreate products." };
+export const metadata = pageMetadata('Become a Phool Mitra', 'Join the ReCCCreate flower collection programme in Jaipur. Coordinate temple flower collection, drop-off and verified credits with our student team.', '/phool-mitra');
 
 const steps = [
   { title: "Sign up", text: "Fill in the form on this page. We will message you on WhatsApp." },
   { title: "Collect", text: "Pick up discarded flowers from a temple near your home." },
   { title: "Drop off and weigh", text: "Bring them to a drop-off point, where they are weighed in front of you." },
   { title: "Earn credits", text: "Every verified kilo earns credits. No weigh-in means no credits." },
-  { title: "Redeem", text: "Use credits for our rangoli colour and compost at 57% off the market price." },
+  { title: "Redeem", text: "Ask the team about using verified credits towards rangoli colour or compost. Redemption terms are confirmed before an exchange." },
 ];
 
 export default function PhoolMitra() {

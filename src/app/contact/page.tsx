@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/site";
 import ContactForm from "@/components/ContactForm";
 import { contactEmail } from "@/lib/contact";
 import { sheetConfigured } from "@/lib/sheet";
 import { projectLocation } from "@/lib/team";
 
-export const metadata: Metadata = { title: "Contact", description: "Contact the ReCCCreate student team at Dharav High School, Bhankrota, Jaipur." };
+export const metadata = pageMetadata('Contact our team', 'Contact ReCCCreate at Dharav High School, Bhankrota, Jaipur, about rangoli colours, flower compost, temple partnerships, volunteering or order support.', '/contact');
 export default function Contact() {
   const deliveryEnabled = sheetConfigured;
   return <section className="section"><div className="container-site two-column">

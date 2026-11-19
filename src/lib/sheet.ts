@@ -48,26 +48,16 @@ export async function saveToSheet(form: SheetForm, row: Record<string, string>):
     return { saved: false, setup: "script out of date" };
   }
 
-  // Google occasionally drops a request or answers with an error page, so try up to three times.
-  // The script refusing the secret is a setup problem, not a blip, so that is not retried.
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    try {
-      const { status, type, json, text } = await callScript({
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...row, form, secret }),
-      });
-      if (json?.ok) return { saved: true };
-      if (json?.error === "unauthorised") {
-        // Report the length (never the value) to help fix the Vercel setting.
-        console.error(`Sheet script refused the secret (length ${secret.length})`);
-        return { saved: false, setup: `secret refused, length ${secret.length}` };
-      }
-      console.error(`Sheet attempt ${attempt} for ${form} failed`, status, type, json?.error ?? text.slice(0, 200));
-    } catch (error) {
-      console.error(`Sheet attempt ${attempt} for ${form} could not reach the script`, error);
-    }
-    if (attempt < 3) await new Promise((resolve) => setTimeout(resolve, 700 * attempt));
+  try {
+    const { status, json } = await callScript({
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...row, form, secret }),
+    });
+    if (status >= 200 && status < 300 && json?.ok === true) return { saved: true };
+    console.error(`Sheet submission for ${form} was not confirmed (HTTP ${status})`);
+    return { saved: false };
+  } catch {
+    console.error(`Sheet submission for ${form} could not be confirmed`);
+    return { saved: false };
   }
-  return { saved: false };
 }

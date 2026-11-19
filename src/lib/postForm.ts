@@ -1,27 +1,11 @@
-/* Browser-side: posts a form's fields as JSON to one of the site's own API routes. */
+/* A request may reach the team even when its response is lost. Never auto-retry. */
 export async function postForm(path: string, form: HTMLFormElement, notSaved: string): Promise<void> {
-  const fields = Object.fromEntries(new FormData(form));
-  const post = () =>
-    fetch(path, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(fields),
-      signal: AbortSignal.timeout(45000),
-    });
-  let res: Response;
   try {
-    // A dropped connection (common on mobile data) fails before reaching us, so retry it once.
-    res = await post().catch(async (error) => {
-      if (!(error instanceof TypeError)) throw error;
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      return post();
-    });
+    const response = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.fromEntries(new FormData(form))), signal: AbortSignal.timeout(30000) });
+    const outcome = await response.json().catch(() => null);
+    if (!response.ok || outcome?.ok !== true) throw new Error(outcome?.error || notSaved);
   } catch (error) {
-    if (error instanceof DOMException && (error.name === "TimeoutError" || error.name === "AbortError")) {
-      throw new Error("The request timed out. It may have reached the team; check with us before sending it again.");
-    }
-    throw new Error("We could not reach the server. Check your internet connection and try again.");
+    if (error instanceof Error && error.name !== "TypeError" && error.name !== "TimeoutError" && error.name !== "AbortError") throw error;
+    throw new Error("We could not confirm receipt. Your request may have reached the team; please contact us before submitting again.");
   }
-  const json = await res.json().catch(() => null);
-  if (!res.ok || !json?.ok) throw new Error(json?.error || notSaved);
 }

@@ -18,12 +18,11 @@ export default function Footer() {
               <li><Link href="/about#process">Our process</Link></li>
               <li><Link href="/shop">The shop</Link></li>
               <li><Link href="/contact">Contact</Link></li>
-              <li><Link href="/trace">Traceability</Link></li>
             </ul>
           </div>
           <div>
-            <p className="footer-heading">Our belief</p>
-            <p className="footer-link-list">Credit. Community. Change.<br />A cycle that gives more back.</p>
+            <p className="footer-heading">Help &amp; policies</p>
+            <ul className="footer-link-list"><li><Link href="/privacy">Privacy policy</Link></li><li><Link href="/terms">Terms &amp; conditions</Link></li><li><Link href="/returns">Orders, delivery &amp; returns</Link></li><li><a href="mailto:recccreate@gmail.com">recccreate@gmail.com</a></li></ul>
           </div>
         </div>
       </div>

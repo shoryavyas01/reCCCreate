@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import FormConsent from "./FormConsent";
 import { contactRoles, contactTopics, contactProducts, contactProductLabel, contactEmail, contactBody, contactDraft, validateContact, type ContactMessage } from "@/lib/contact";
 
 export default function ContactForm({ deliveryEnabled }: { deliveryEnabled: boolean }) {
@@ -25,7 +26,7 @@ export default function ContactForm({ deliveryEnabled }: { deliveryEnabled: bool
     }
     busy.current = true; setSending(true);
     try {
-      const response = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(result.data), signal: AbortSignal.timeout(55000) });
+      const response = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(result.data), signal: AbortSignal.timeout(30000) });
       const outcome = await response.json().catch(() => null);
       if (!response.ok || outcome?.ok !== true) throw new Error(outcome?.error || "Your message was not sent. Please try again.");
       setSent(true); setTopic(""); form.reset();
@@ -38,7 +39,7 @@ export default function ContactForm({ deliveryEnabled }: { deliveryEnabled: bool
     }
   }
   if (sent) return <div ref={feedback} role="status" tabIndex={-1}><h2 className="text-3xl">Message sent.</h2><p className="body-copy mt-4">Thank you for contacting ReCCCreate. The team will reply to your email.</p><button className="btn btn-secondary mt-6" onClick={() => setSent(false)}>Send another message</button></div>;
-  return <form className="flex flex-col gap-5" onSubmit={submit} onChange={() => { setDraft(null); setError(""); }} aria-busy={sending}>
+  return <form className="form-shell flex flex-col gap-5" onSubmit={submit} onChange={() => { setDraft(null); setError(""); }} aria-busy={sending}>
     {!deliveryEnabled && <p className="text-sm leading-6 text-[#4e503a]">Fill in your details to prepare an email to the team. You’ll review and send it from your email app.</p>}
     <fieldset disabled={sending} className="flex min-w-0 flex-col gap-5 border-0 p-0">
       <div className="form-row"><div><label className="label" htmlFor="contact-name">Name</label><input className="field" id="contact-name" name="name" required minLength={2} maxLength={100} autoComplete="name" /></div><div><label className="label" htmlFor="contact-email">Email</label><input className="field" id="contact-email" name="email" type="email" maxLength={254} required autoComplete="email" /></div></div>
@@ -46,6 +47,7 @@ export default function ContactForm({ deliveryEnabled }: { deliveryEnabled: bool
       <div className="form-row"><div><label className="label" htmlFor="contact-role">I am a…</label><select className="field" id="contact-role" name="role" required defaultValue=""><option value="" disabled>Choose one</option>{contactRoles.map((role) => <option key={role}>{role}</option>)}</select></div><div><label className="label" htmlFor="contact-topic">What is this about?</label><select className="field" id="contact-topic" name="topic" required value={topic} onChange={(event) => setTopic(event.target.value)}><option value="" disabled>Choose one</option>{contactTopics.map((topic) => <option key={topic}>{topic}</option>)}</select></div></div>
       {topic === "Buying" && <div><label className="label" htmlFor="contact-product">Product</label><select className="field" id="contact-product" name="product" required defaultValue=""><option value="" disabled>Choose a product</option>{contactProducts.map((product) => <option key={product.id} value={product.id}>{contactProductLabel(product.id)}</option>)}</select></div>}
       <div><label className="label" htmlFor="contact-message">Message</label><textarea className="field min-h-40 resize-y" id="contact-message" name="message" rows={6} minLength={10} maxLength={5000} required placeholder="Tell us what you have in mind…" /></div>
+      <FormConsent />
       <input type="text" name="botcheck" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
       <button type="submit" className="btn btn-primary self-start">{sending ? "Sending…" : deliveryEnabled ? "Send message" : "Prepare email"} ↗</button>
     </fieldset>

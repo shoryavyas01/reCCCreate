@@ -1,3 +1,4 @@
+import { hasFormConsent } from "./formRequest";
 import { postForm } from "./postForm";
 
 /* Phool Mitra sign-up: shared field rules plus the browser-side sender.
@@ -22,6 +23,7 @@ export function normalisePhone(raw: string): string | null {
 
 /* Returns the cleaned sign-up, or an error message for the visitor. */
 export function validateSignup(input: Record<string, unknown>): { data: PhoolMitraSignup } | { error: string } {
+  if (!hasFormConsent(input.consent)) return { error: "Please read and acknowledge the privacy notice before submitting." };
   const text = (key: string) => (typeof input[key] === "string" ? (input[key] as string).trim() : "");
   const name = text("name");
   const area = text("area");

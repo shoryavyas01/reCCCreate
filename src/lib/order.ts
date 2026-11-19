@@ -1,3 +1,4 @@
+import { hasFormConsent } from "./formRequest";
 import { postForm } from "./postForm";
 import { normalisePhone } from "./phoolMitra";
 import type { Product } from "./types";
@@ -18,6 +19,7 @@ export type OrderRequest = {
 };
 
 export function validateOrder(input: Record<string, unknown>, products: Product[]): { data: OrderRequest } | { error: string } {
+  if (!hasFormConsent(input.consent)) return { error: "Please read and acknowledge the privacy notice before submitting." };
   const text = (key: string) => (typeof input[key] === "string" ? (input[key] as string).trim() : "");
   const name = text("name");
   const rawPhone = text("phone");
@@ -27,7 +29,8 @@ export function validateOrder(input: Record<string, unknown>, products: Product[
 
   if (name.length < 2 || name.length > 100) return { error: "Please enter your name." };
   // Indian mobiles are tidied to +91 XXXXX XXXXX; other numbers are kept as typed.
-  const phone = normalisePhone(rawPhone) ?? (/^[+0-9 ()-]{10,20}$/.test(rawPhone) ? rawPhone : null);
+  const digits = rawPhone.replace(/[ ()-]/g, "");
+  const phone = normalisePhone(rawPhone) ?? (/^\+?[1-9]\d{9,14}$/.test(digits) ? digits : null);
   if (!phone) return { error: "Please enter a phone number we can call." };
   if (!product) return { error: "Please choose a product that is in stock." };
   if (!Number.isInteger(quantity) || quantity < 1 || quantity > 100) return { error: "Please enter a quantity from 1 to 100." };

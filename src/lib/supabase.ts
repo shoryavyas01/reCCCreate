@@ -8,7 +8,7 @@ export const supabaseConfigured = Boolean(url && anonKey);
 let client: SupabaseClient | null = null;
 
 /* Returns null until the Supabase keys are set in .env.local,
-   so the public pages can fall back to sample data. */
+   so the public pages can use the published catalogue. */
 export function getSupabase(): SupabaseClient | null {
   if (!url || !anonKey) return null;
   if (!client) client = createClient(url, anonKey);

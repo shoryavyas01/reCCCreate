@@ -184,7 +184,7 @@ export default function AdminApp() {
       </div>
 
       {error && <p role="alert" className="mt-5 text-error">{error}</p>}
-      <ResourceManager key={tab} db={db} table={tab} fields={fields[tab]} orderBy={orderBy[tab]} showQr={tab === "batches"} />
+      <ResourceManager key={tab} db={db} table={tab} fields={fields[tab]} orderBy={orderBy[tab]} />
     </div>
   );
 }
