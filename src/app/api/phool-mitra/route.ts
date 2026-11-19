@@ -5,6 +5,9 @@ import { validateSignup } from "@/lib/phoolMitra";
 const scriptUrl = process.env.PHOOL_MITRA_SCRIPT_URL;
 const secret = process.env.PHOOL_MITRA_SECRET;
 
+// Leaves room for three tries at the Google script.
+export const maxDuration = 45;
+
 const fail = (error: string, status: number) => Response.json({ ok: false, error }, { status });
 
 export async function POST(request: Request) {
@@ -18,22 +21,36 @@ export async function POST(request: Request) {
   const result = validateSignup(body as Record<string, unknown>);
   if ("error" in result) return fail(result.error, 400);
 
+  // Google occasionally drops a request or answers with an error page, so try up to three times.
+  // The script refusing the secret is a setup problem, not a blip, so that is not retried.
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const outcome = await appendRow({ ...result.data, secret }, attempt);
+    if (outcome === "saved") return Response.json({ ok: true });
+    if (outcome === "refused") break;
+    if (attempt < 3) await new Promise((resolve) => setTimeout(resolve, 700 * attempt));
+  }
+  return fail("Your sign-up was not saved. Please try again in a few minutes.", 502);
+}
+
+async function appendRow(row: Record<string, string>, attempt: number): Promise<"saved" | "refused" | "failed"> {
   try {
     // Apps Script answers with a redirect to the result; fetch follows it.
-    const res = await fetch(scriptUrl, {
+    const res = await fetch(scriptUrl!, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...result.data, secret }),
-      signal: AbortSignal.timeout(15000),
+      body: JSON.stringify(row),
+      signal: AbortSignal.timeout(12000),
     });
-    const json = await res.json().catch(() => null);
-    if (!json?.ok) {
-      console.error("Phool Mitra sheet rejected the sign-up", res.status, json?.error);
-      return fail("Your sign-up was not saved. Please try again in a few minutes.", 502);
-    }
+    const text = await res.text();
+    let json: { ok?: boolean; error?: string } | null = null;
+    try {
+      json = JSON.parse(text);
+    } catch {}
+    if (json?.ok) return "saved";
+    console.error(`Phool Mitra sheet attempt ${attempt} failed`, res.status, res.headers.get("content-type"), json?.error ?? text.slice(0, 200));
+    return json?.error === "unauthorised" ? "refused" : "failed";
   } catch (error) {
-    console.error("Phool Mitra sheet could not be reached", error);
-    return fail("Your sign-up was not saved. Please try again in a few minutes.", 502);
+    console.error(`Phool Mitra sheet attempt ${attempt} could not reach the script`, error);
+    return "failed";
   }
-  return Response.json({ ok: true });
 }

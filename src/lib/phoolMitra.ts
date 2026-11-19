@@ -37,13 +37,20 @@ export function validateSignup(input: Record<string, unknown>): { data: PhoolMit
 
 export async function sendSignup(form: HTMLFormElement): Promise<void> {
   const fields = Object.fromEntries(new FormData(form));
-  let res: Response;
-  try {
-    res = await fetch("/api/phool-mitra", {
+  const post = () =>
+    fetch("/api/phool-mitra", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(fields),
-      signal: AbortSignal.timeout(20000),
+      signal: AbortSignal.timeout(45000),
+    });
+  let res: Response;
+  try {
+    // A dropped connection (common on mobile data) fails before reaching us, so retry it once.
+    res = await post().catch(async (error) => {
+      if (!(error instanceof TypeError)) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      return post();
     });
   } catch (error) {
     if (error instanceof DOMException && (error.name === "TimeoutError" || error.name === "AbortError")) {
