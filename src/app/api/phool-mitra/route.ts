@@ -2,8 +2,9 @@ import { validateSignup } from "@/lib/phoolMitra";
 
 /* Receives a Phool Mitra sign-up from the site and appends it to the Google Sheet
    through the Apps Script web app. Both values below are server-only env vars. */
-const scriptUrl = process.env.PHOOL_MITRA_SCRIPT_URL;
-const secret = process.env.PHOOL_MITRA_SECRET;
+// Trimmed, because a value pasted into Vercel can pick up a stray space or line break.
+const scriptUrl = process.env.PHOOL_MITRA_SCRIPT_URL?.trim();
+const secret = process.env.PHOOL_MITRA_SECRET?.trim();
 
 // Leaves room for three tries at the Google script.
 export const maxDuration = 45;
@@ -26,7 +27,11 @@ export async function POST(request: Request) {
   for (let attempt = 1; attempt <= 3; attempt++) {
     const outcome = await appendRow({ ...result.data, secret }, attempt);
     if (outcome === "saved") return Response.json({ ok: true });
-    if (outcome === "refused") break;
+    // The script did not accept the secret: say so, with its length (never the value), to help fix the setting.
+    if (outcome === "refused") {
+      console.error(`Phool Mitra sheet refused the secret (length ${secret.length})`);
+      return Response.json({ ok: false, error: "Your sign-up was not saved. Please try again in a few minutes.", setup: `secret refused, length ${secret.length}` }, { status: 502 });
+    }
     if (attempt < 3) await new Promise((resolve) => setTimeout(resolve, 700 * attempt));
   }
   return fail("Your sign-up was not saved. Please try again in a few minutes.", 502);
