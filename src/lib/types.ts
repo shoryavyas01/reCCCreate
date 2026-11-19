@@ -7,7 +7,7 @@ export type Temple = {
   is_visible: boolean;
 };
 
-export type TempleWithTotal = Omit<Temple, "is_visible"> & { kg_collected: number | null; photo_credit?: string; photo_source?: string };
+export type TempleWithTotal = Omit<Temple, "is_visible"> & { kg_collected: number | null; photo_credit?: string; photo_source?: string; photo_kind?: "illustration" | "photograph" };
 
 export type Collection = { id: string; temple_id: string; date: string; kg: number };
 
