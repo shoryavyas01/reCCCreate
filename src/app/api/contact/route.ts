@@ -1,25 +1,20 @@
 import { validateContact } from "@/lib/contact";
 import { saveToSheet, sheetConfigured } from "@/lib/sheet";
 
-/* Receives a Contact Us message and appends it to the Contact tab of the Google Sheet. */
-
-// Leaves room for the script version check and three tries at the Google script.
-export const maxDuration = 50;
-
-const fail = (error: string, status: number, setup?: string) => Response.json({ ok: false, error, setup }, { status });
-
+export const maxDuration = 55;
+const fail = (error: string, status: number) => Response.json({ ok: false, error }, { status });
 export async function POST(request: Request) {
-  if (!sheetConfigured) return fail("Messages are not open yet. Please check back soon.", 503);
-
-  const body = await request.json().catch(() => null);
-  if (!body || typeof body !== "object") return fail("Something went wrong with the form. Please reload the page and try again.", 400);
-  // Hidden honeypot field: real visitors leave it empty.
-  if ((body as Record<string, unknown>).botcheck) return fail("Your message could not be sent. Please reload the page and try again.", 400);
-
-  const result = validateContact(body as Record<string, unknown>);
+  const origin = request.headers.get("origin");
+  if (origin && origin !== new URL(request.url).origin) return fail("Please send your message from the contact page.", 403);
+  if (Number(request.headers.get("content-length")) > 30000) return fail("Your message is too long.", 413);
+  const result = validateContact(await request.json().catch(() => null));
   if ("error" in result) return fail(result.error, 400);
-
-  const saved = await saveToSheet("contact", result.data);
-  if (saved.saved) return Response.json({ ok: true });
-  return fail("Your message was not sent. Please try again in a few minutes.", 502, saved.setup);
+  if (!sheetConfigured) return fail("Direct delivery is not connected. Use the email draft below to contact the team.", 503);
+  try {
+    const saved = await saveToSheet("contact", result.data);
+    if (!saved.saved) return fail("Your message was not saved. Please retry or use the email draft below.", 502);
+    return Response.json({ ok: true });
+  } catch {
+    return fail("Your message was not saved. Please retry or use the email draft below.", 502);
+  }
 }

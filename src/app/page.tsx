@@ -3,8 +3,7 @@ import Link from "next/link";
 import BotanicalMotif from "@/components/BotanicalMotif";
 import BatchLookup from "@/components/BatchLookup";
 import FlowerJourney from "@/components/FlowerJourney";
-import PhotoPanel from "@/components/PhotoPanel";
-import SampleNotice from "@/components/SampleNotice";
+import TempleCards from "@/components/TempleCards";
 import { getTemples } from "@/lib/data";
 import { publishedImpact } from "@/lib/impact";
 import { formatDate, formatKg } from "@/lib/format";
@@ -15,7 +14,7 @@ const questions = [
   { question: "What happens to the temple flowers?", answer: "We collect and weigh flowers from partner temples. Petals are sorted, sun-dried and ground for rangoli colour. Surplus flowers go to a compost unit." },
   { question: "How do I place an order?", answer: "Choose a product in the shop and send an order request. The team will call to confirm availability, price and delivery. Payment is by UPI on delivery; no online payment is collected here." },
   { question: "Can my temple or school take part?", answer: "Yes. Use the contact form to tell us your location and how you would like to help. We will discuss collection arrangements with you. A temple is named publicly only after giving permission." },
-  { question: "How can I trace a pack?", answer: "Scan the QR code on the packaging, or enter its batch ID below. The batch page shows the recorded source, collection date, flowers used and the people who made it. The sample batch illustrates this without claiming a real origin." },
+  { question: "How can I trace a pack?", answer: "Scan the QR code on the packaging, or enter its batch ID below. Explore product ingredients, packaging details, batch information and our student team. Source temples, collection dates and flower weights appear when recorded for a batch." },
 ];
 
 export default async function Home() {
@@ -28,11 +27,11 @@ export default async function Home() {
     <section className="hero-section">
       <div className="container-site hero-grid">
         <div className="hero-intro">
-          <p className="eyebrow mb-7">ReCCCreate · Bhankrota, Jaipur</p>
+          <p className="eyebrow mb-7">ReCCCreate · Dharav High School, Bhankrota, Jaipur</p>
           <h1 className="hero-title">Temple flowers.<br /><span className="display-accent">Rangoli colours.</span></h1>
           <p className="body-copy hero-summary mt-7">Collected from Jaipur temples. Sorted by our student team. Remade as rangoli colour and compost.</p>
           <div className="mt-8 flex flex-wrap gap-3"><Link href="/shop" className="btn btn-primary">Explore our rangoli colours & compost <span aria-hidden="true">↗</span></Link><Link href="#journey-heading" className="btn btn-text">See how it’s made <span aria-hidden="true">↓</span></Link></div>
-          <div className="hero-signature"><span className="hero-signature-mark" aria-hidden="true">✳</span><p>A student venture.<br /><span>Rooted in Dharav High School.</span></p></div>
+          <div className="hero-signature"><span className="hero-signature-mark" aria-hidden="true">✳</span><p>A student venture.<br /><span>Rooted in Dharav High School, Bhankrota.</span></p></div>
         </div>
         <div className="hero-art-wrap">
           <BotanicalMotif className="hero-botanical" />
@@ -71,12 +70,11 @@ export default async function Home() {
     </div></div></section>
 
     <section className="section temples-section" data-reveal aria-labelledby="temples-heading"><div className="container-site">
-      <div className="section-heading"><div><p className="eyebrow mb-4">A local circle of care</p><h2 id="temples-heading">Our temple <span className="display-accent">partners.</span></h2><p className="body-copy mt-4 max-w-xl">Partner temples are named only with their permission.</p></div><Link href="/contact" className="btn btn-secondary">Become a partner ↗</Link></div>
-      {temples.sample && <SampleNotice />}
-      {temples.data.length === 0 ? <div className="card p-7"><h3>Our circle is growing.</h3><p className="body-copy mt-3">Partner temples will be listed here once confirmed. Manage a temple in Jaipur? We would like to hear from you.</p></div> : <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{temples.data.map((temple) => <li key={temple.id} className="temple-card"><PhotoPanel src={temple.photo_url} alt={temple.name} ratio="aspect-[16/10]" /><div className="pt-5"><p className="eyebrow">{temple.area}</p><h3 className="mt-3">{temple.name}</h3><div className="mt-5 flex justify-between gap-4 border-t border-black/15 pt-4 text-sm"><div><p className="text-xs text-[#4e503a]">Collecting since</p><p className="mt-1">{formatDate(temple.collecting_since, false) || "To be confirmed"}</p></div><div className="text-right"><p className="text-xs text-[#4e503a]">Collected</p><p className="mt-1 font-semibold">{formatKg(temple.kg_collected)} kg</p></div></div></div></li>)}</ul>}
+      <div className="section-heading"><div><p className="eyebrow mb-4">A local circle of care</p><h2 id="temples-heading">Our temple <span className="display-accent">partners.</span></h2><p className="body-copy mt-4 max-w-xl">The Jaipur temples connected with our flower collection journey.</p></div><Link href="/contact" className="btn btn-secondary">Become a partner ↗</Link></div>
+      <TempleCards temples={temples.data} />
     </div></section>
 
-    <section className="section trace-section" data-reveal><div className="container-site trace-grid"><div><p className="eyebrow mb-5">From offering to your hands</p><h2>Trace the flowers<br /><span className="display-accent">in your pack.</span></h2><p className="body-copy mt-5">Follow the source, collection date and makers behind your batch.</p><Link href="/trace/sample" className="journey-link mt-5">Explore a labelled sample ↗</Link></div><BatchLookup /></div></section>
+    <section className="section trace-section" data-reveal><div className="container-site trace-grid"><div><p className="eyebrow mb-5">From offering to your hands</p><h2>Trace the flowers<br /><span className="display-accent">in your pack.</span></h2><p className="body-copy mt-5">Explore our products, recorded batch details and the student team behind the work.</p><Link href="/trace" className="journey-link mt-5">Trace our products ↗</Link></div><BatchLookup /></div></section>
 
     <section className="section faq-section" data-reveal aria-labelledby="faq-heading"><div className="container-site faq-grid"><div><p className="eyebrow mb-5">A few useful answers</p><h2 id="faq-heading">Good questions.<br /><span className="display-accent">Straight answers.</span></h2></div><div>{questions.map((item, i) => <details className="faq-item" key={item.question}><summary><span className="faq-number">0{i + 1}</span><span>{item.question}</span><span className="faq-plus" aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}</div></div></section>
 
