@@ -13,7 +13,7 @@ export async function getTemples(): Promise<{ data: TempleWithTotal[] }> {
   const key = (name: string) => name.toLowerCase().replace(/[^a-z0-9]/g, "");
   return { data: [...projectTemples.map((temple) => {
     const recorded = live.find((item) => key(item.name) === key(temple.name));
-    return recorded ? { ...temple, ...recorded, photo_url: recorded.photo_url || temple.photo_url } : temple;
+    return recorded ? { ...temple, ...recorded, photo_url: recorded.photo_url || temple.photo_url, photo_kind: recorded.photo_url ? recorded.photo_kind : temple.photo_kind, photo_credit: recorded.photo_url ? recorded.photo_credit : temple.photo_credit, photo_source: recorded.photo_url ? recorded.photo_source : temple.photo_source } : temple;
   }), ...live.filter((item) => !projectTemples.some((temple) => key(temple.name) === key(item.name)))] };
 }
 

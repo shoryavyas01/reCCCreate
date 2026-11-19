@@ -116,7 +116,7 @@ Page introductions and paired sections use equal-width columns and one shared gu
 
 - Jharkhand Mahadev Mandir: photograph from the temple’s official website, https://jharkhandmahadev.in/jkmadmin/uploads/banners/1551519133.jpg. Linked credit appears on the temple card.
 - Shri Radha Gopinath Ji Temple: Anildiggiwal, 8 May 2025, CC0, https://commons.wikimedia.org/wiki/File:Shri_Radha_Gopinath_Ji_Temple_Jaipur.jpg. Linked attribution appears on the temple card.
-- Shiv Mandir, Rangoli Road: the exact temple could not be verified in public image sources. A typographic panel is used until the team supplies its photograph or exact Maps listing.
+- Shiv Mandir, Rangoli Road: a representative AI-generated Shiva shrine illustration replaces the title panel. The caption and image alt text identify it as an illustration; it is not a documentary photograph of the named temple. Asset: `public/images/temples/shiv-mandir-illustration.webp`. Replace it when a verified site photograph is supplied.
 
 The team inbox `recccreate@gmail.com` is transcribed from the supplied Kesar Kyari packaging. Never add placeholder phone numbers from packaging artwork.
 
