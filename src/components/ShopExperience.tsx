@@ -8,9 +8,10 @@ import BotanicalMotif from "./BotanicalMotif";
 import ProductGallery from "./ProductGallery";
 import ProductDetails from "./ProductDetails";
 import FormShell from "./FormShell";
+import { sendOrder } from "@/lib/order";
 
 type Filter = "all" | "gulaal" | "compost";
-export default function ShopExperience({ products, sample, initialFilter }: { products: Product[]; sample: boolean; initialFilter: Filter }) {
+export default function ShopExperience({ products, sample, initialFilter, ordersOpen }: { products: Product[]; sample: boolean; initialFilter: Filter; ordersOpen: boolean }) {
   const [filter, setFilter] = useState<Filter>(initialFilter);
   const [selected, setSelected] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -18,7 +19,7 @@ export default function ShopExperience({ products, sample, initialFilter }: { pr
   const available = products.filter((p) => p.in_stock);
   const visible = products.filter((p) => filter === "all" || p.type === filter);
   const product = available.find((p) => p.id === selected);
-  const reason = sample ? "Online order requests are not open yet. Please contact the team for availability." : available.length === 0 ? "Orders are paused while products are out of stock. Please check back soon." : undefined;
+  const reason = !ordersOpen ? "Online order requests are not open yet. Please contact the team for availability." : available.length === 0 ? "Orders are paused while products are out of stock. Please check back soon." : undefined;
   function choose(id: string) {
     setSelected(id);
     setQuantity(1);
@@ -29,7 +30,7 @@ export default function ShopExperience({ products, sample, initialFilter }: { pr
   return <>
     <section className="section-tight bg-[#d5b57d]" aria-labelledby="products-heading"><div className="container-site">
       <div className="section-heading"><div><p className="eyebrow mb-4">The collection</p><h2 id="products-heading">Colour and care,<br /><span className="display-accent">from the same petals.</span></h2></div><p className="max-w-xs text-sm leading-7 text-[#4e503a]">Local order requests. The team confirms price, availability and delivery before you pay.</p></div>
-      {sample && <p className="catalogue-note">Explore the collection. Contact the team to confirm availability and place an order.</p>}
+      {sample && !ordersOpen && <p className="catalogue-note">Explore the collection. Contact the team to confirm availability and place an order.</p>}
       <div className="shop-filters" role="group" aria-label="Filter products">{(["all", "gulaal", "compost"] as Filter[]).map((value) => <button type="button" className="filter-button" aria-pressed={filter === value} key={value} onClick={() => setFilter(value)}>{value === "all" ? "All products" : value === "gulaal" ? "Rangoli colour" : "Flower compost"}</button>)}</div>
       <p className="sr-only" aria-live="polite">{visible.length} products shown</p>
       {visible.length === 0 ? <div className="card p-8"><h3>{products.length ? "No products in this collection yet." : "Our collection is being prepared."}</h3><p className="body-copy mt-3">Check back soon or contact the team for availability.</p>{filter !== "all" && <button className="btn btn-secondary mt-5" onClick={() => setFilter("all")}>Show all products</button>}</div> : <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{visible.map((item) => <li key={item.id} className="product-card flex flex-col border border-black/15 bg-[#ecd4a9]">
@@ -39,12 +40,12 @@ export default function ShopExperience({ products, sample, initialFilter }: { pr
     </div></section>
     <section ref={order} id="order" className="section" aria-labelledby="order-heading"><div className="container-site two-column">
       <div><p className="eyebrow mb-5">From our circle to yours</p><h2 id="order-heading">Bring a little<br /><span className="display-accent">colour home.</span></h2><p className="body-copy mt-5">Send a request and the team will call to confirm the details. Payment is by UPI on delivery.</p><p className="mt-6 border-t border-black/15 pt-5 text-sm text-[#4e503a]">No payment is collected on this website.</p></div>
-      <div className="card form-panel"><FormShell subject="New order from the ReCCCreate website" submitLabel="Request order" thanks="Your request has reached the team. We will call to confirm price, availability and delivery before payment." disabledReason={reason} onSent={() => { setSelected(""); setQuantity(1); }}>
+      <div className="card form-panel"><FormShell send={sendOrder} subject="New order from the ReCCCreate website" submitLabel="Request order" thanks="Your request has reached the team. We will call to confirm price, availability and delivery before payment." disabledReason={reason} onSent={() => { setSelected(""); setQuantity(1); }}>
         <div className="form-row"><div><label className="label" htmlFor="order-name">Name</label><input className="field" id="order-name" name="name" minLength={2} maxLength={100} required autoComplete="name" /></div><div><label className="label" htmlFor="order-phone">Phone</label><input className="field" id="order-phone" name="phone" type="tel" pattern="[+0-9 ()-]{10,20}" title="Enter a phone number with 10 to 20 characters, including country code if needed." maxLength={20} required autoComplete="tel" /></div></div>
         <div className="form-row form-row-quantity"><div><label className="label" htmlFor="order-product">Product</label><select className="field" id="order-product" name="product" required value={selected} onChange={(e) => setSelected(e.target.value)}><option value="" disabled>Choose a product</option>{available.map((p) => <option key={p.id} value={p.id}>{p.name} ({p.size}){p.price_inr > 0 ? `, ₹${p.price_inr}` : ""}</option>)}</select></div><div><label className="label" htmlFor="order-quantity">Quantity</label><input className="field" id="order-quantity" name="quantity" type="number" min={1} max={100} step={1} value={Number.isFinite(quantity) ? quantity : ""} onChange={(e) => setQuantity(e.currentTarget.valueAsNumber)} required /></div></div>
         {product && <div className="order-summary" role="status"><strong>{product.name}</strong><p>{Number.isFinite(quantity) && quantity >= 1 && quantity <= 100 ? `${quantity} × ${product.size}` : "Enter a quantity from 1 to 100"}{product.price_inr > 0 && Number.isFinite(quantity) && quantity >= 1 && quantity <= 100 ? ` · Product total ₹${(product.price_inr * quantity).toLocaleString("en-IN")}` : " · Price confirmed by the team"}</p><p className="mt-1 text-xs">Delivery arrangements and final price are confirmed by phone.</p></div>}
         <div><label className="label" htmlFor="order-delivery">Delivery area or school class</label><input className="field" id="order-delivery" name="delivery_area_or_class" required maxLength={300} placeholder="For example: Bhankrota, or Class 9B" /></div>
-        <input type="hidden" name="product_details" value={product ? `${product.name} (${product.size})` : ""} /><input type="hidden" name="payment" value="UPI on delivery" />
+        
       </FormShell></div>
     </div></section>
   </>;
