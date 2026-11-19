@@ -17,10 +17,9 @@ Open http://localhost:3000. Without keys the site shows the published product ca
 
 Copy `.env.example` to `.env.local` and fill it in. Never commit `.env.local`.
 
-### 1. Web3Forms (shop order form)
+### 1. Web3Forms (not needed)
 
-1. Go to web3forms.com and create an access key using the email that should receive messages (a shared team Gmail that forwards to every member is best).
-2. Put the key in `NEXT_PUBLIC_WEB3FORMS_KEY`.
+The contact, order and Phool Mitra forms all save to the Google Sheet (section 3), so you do not need a Web3Forms key. `FormShell` still falls back to Web3Forms for a form that does not pass its own `send` function; to use that, create a key at web3forms.com with the team email and put it in `NEXT_PUBLIC_WEB3FORMS_KEY`.
 
 ### 2. Supabase (data and admin login)
 
@@ -37,9 +36,9 @@ Copy `.env.example` to `.env.local` and fill it in. Never commit `.env.local`.
 
 Sign in at `/admin`. Only accounts in the `admins` table can sign in or change data; the database itself enforces this.
 
-### 3. Google Sheet (Phool Mitra sign-ups and Contact Us messages)
+### 3. Google Sheet (Phool Mitra sign-ups, Contact Us messages and shop orders)
 
-Each sign-up on `/phool-mitra` becomes a row in the **Sign-ups** tab (Timestamp, Name, Phone, Area/Locality, Nearest Temple(s), Collection Frequency), and each message on `/contact` becomes a row in the **Contact** tab (Timestamp, Name, Email, Phone, I am a, About, Message). The browser sends each form to the site's own API route (`/api/phool-mitra` or `/api/contact`), which checks it and passes it to a Google Apps Script attached to the sheet. The script address and secret stay on the server, so visitors never see them.
+Each sign-up on `/phool-mitra` becomes a row in the **Sign-ups** tab (Timestamp, Name, Phone, Area/Locality, Nearest Temple(s), Collection Frequency), each message on `/contact` becomes a row in the **Contact** tab (Timestamp, Name, Email, Phone, I am a, About, Message), and each order request on `/shop` becomes a row in the **Orders** tab (Timestamp, Name, Phone, Product, Size, Quantity, Price each, Total, Delivery area / class, Payment). The product name, price and total are looked up on the server, not taken from the browser. The browser sends each form to the site's own API route (`/api/phool-mitra`, `/api/contact` or `/api/order`), which checks it and passes it to a Google Apps Script attached to the sheet. The script address and secret stay on the server, so visitors never see them.
 
 1. Create a Google Sheet (for example "Phool Mitra sign-ups") with the team's Google account.
 2. In the sheet, open **Extensions > Apps Script**. Delete the sample code, paste in all of `google-apps-script/website-forms.gs`, and save.
@@ -47,7 +46,7 @@ Each sign-up on `/phool-mitra` becomes a row in the **Sign-ups** tab (Timestamp,
 4. Click **Deploy > New deployment**, choose type **Web app**, set **Execute as: Me** and **Who has access: Anyone**, then click **Deploy**. Approve the permission prompt with the team account. Copy the web app URL, which ends in `/exec`.
 5. Put the URL in `PHOOL_MITRA_SCRIPT_URL` and the secret in `PHOOL_MITRA_SECRET`, in `.env.local` and in Vercel (**Settings > Environment Variables**), then redeploy. Until both are set, sign-ups show an unavailable notice and the contact form offers an email draft instead.
 
-Each tab is created with its header row the first time that form is used. Before saving a Contact message, the site checks the script is version 2 or later, so an old copy of the script can never put messages in the Sign-ups tab. "Anyone" access is needed for the site to reach the script; the secret is what stops anyone else adding rows. If you change the script later, use **Deploy > Manage deployments > Edit > New version**, so the URL stays the same.
+Each tab is created with its header row the first time that form is used. Before saving a Contact message or an order, the site checks the script is new enough (version 2 for Contact, version 3 for Orders), so an old copy of the script can never put them in the Sign-ups tab. "Anyone" access is needed for the site to reach the script; the secret is what stops anyone else adding rows. If you change the script later, use **Deploy > Manage deployments > Edit > New version**, so the URL stays the same.
 
 ## Where to change things
 

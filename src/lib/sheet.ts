@@ -7,7 +7,10 @@ const secret = process.env.PHOOL_MITRA_SECRET?.trim();
 
 export const sheetConfigured = Boolean(scriptUrl && secret);
 
-export type SheetForm = "phool-mitra" | "contact";
+export type SheetForm = "phool-mitra" | "contact" | "order";
+
+// The oldest script version that knows each form. Older copies of the script put every row in Sign-ups.
+const minimumVersion: Record<SheetForm, number> = { "phool-mitra": 1, contact: 2, order: 3 };
 export type SaveResult = { saved: true } | { saved: false; setup?: string };
 
 type ScriptReply = { ok?: boolean; error?: string; version?: number };
@@ -23,23 +26,24 @@ async function callScript(init: RequestInit): Promise<{ status: number; type: st
   return { status: res.status, type: res.headers.get("content-type"), json, text };
 }
 
-/* Older copies of the script know only Phool Mitra sign-ups and would put any other form
-   in the Sign-ups tab, so check the script is version 2 or later before sending one. */
-let scriptVersion: number | null = null;
-async function scriptSupportsForms(): Promise<boolean> {
-  if (scriptVersion !== null && scriptVersion >= 2) return true;
+/* Asks the script which version it is (a GET, which saves nothing) before sending a form
+   that older copies of the script do not know. */
+let scriptVersion = 0;
+async function scriptSupports(form: SheetForm): Promise<boolean> {
+  const needed = minimumVersion[form];
+  if (needed <= 1 || scriptVersion >= needed) return true;
   try {
     const { json } = await callScript({ method: "GET" });
     scriptVersion = typeof json?.version === "number" ? json.version : 0;
   } catch {
     return false;
   }
-  return scriptVersion >= 2;
+  return scriptVersion >= needed;
 }
 
 export async function saveToSheet(form: SheetForm, row: Record<string, string>): Promise<SaveResult> {
   if (!scriptUrl || !secret) return { saved: false, setup: "sheet not configured" };
-  if (form !== "phool-mitra" && !(await scriptSupportsForms())) {
+  if (!(await scriptSupports(form))) {
     console.error(`Sheet script is out of date: paste the latest google-apps-script/website-forms.gs and deploy a new version before using the ${form} form`);
     return { saved: false, setup: "script out of date" };
   }

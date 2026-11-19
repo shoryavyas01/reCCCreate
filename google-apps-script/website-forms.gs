@@ -1,13 +1,14 @@
 /**
- * ReCCCreate website forms -> Google Sheet (version 2).
+ * ReCCCreate website forms -> Google Sheet (version 3).
  *
- * Handles Phool Mitra sign-ups and Contact Us messages, each in its own tab.
+ * Handles Phool Mitra sign-ups, Contact Us messages and shop order requests,
+ * each in its own tab.
  * Paste this into the Sheet's Apps Script editor (Extensions > Apps Script),
  * set the SHARED_SECRET script property, and deploy it as a web app.
  * After changing it, use Deploy > Manage deployments > Edit > New version,
  * so the web app URL stays the same. The README has the full steps.
  */
-const VERSION = 2;
+const VERSION = 3;
 
 const FORMS = {
   "phool-mitra": {
@@ -21,6 +22,12 @@ const FORMS = {
     headers: ["Timestamp", "Name", "Email", "Phone", "I am a", "About", "Message"],
     fields: ["name", "email", "phone", "role", "topic", "message"],
     textColumns: ["D"],
+  },
+  order: {
+    sheet: "Orders",
+    headers: ["Timestamp", "Name", "Phone", "Product", "Size", "Quantity", "Price each (₹)", "Total (₹)", "Delivery area / class", "Payment"],
+    fields: ["name", "phone", "product", "size", "quantity", "price", "total", "delivery", "payment"],
+    textColumns: ["C"],
   },
 };
 
