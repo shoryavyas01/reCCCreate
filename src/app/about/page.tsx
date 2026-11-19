@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Our story",
   description: "Meet the students behind ReCCCreate and discover how temple flowers find a second life in Jaipur.",
 };
 
-const team = ["Aryaman", "Shubhi", "Paridhi", "Kushagra"];
+const team = [
+  { name: "Paridhi Sharma", photo: "paridhi-sharma" },
+  { name: "Kushagra Somani", photo: "kushagra-somani" },
+  { name: "Shubhi Pareek", photo: "shubhi-pareek" },
+  { name: "Shorya Vyas", photo: "shorya-vyas" },
+  { name: "Aryaman Pandey", photo: "aryaman-pandey" },
+];
 const steps = [
   { title: "Collection", caption: "Flowers are picked up from partner temples each morning and weighed.", symbol: "01" },
   { title: "A new purpose", caption: "Petals are sorted, sun-dried and ground into gulaal; surplus goes to a compost unit.", symbol: "02" },
@@ -41,7 +48,19 @@ export default function About() {
           <div><p className="eyebrow mb-4">The people behind the petals</p><h2 id="team-heading">A student team, learning by doing.</h2></div>
           <p className="body-copy">We are building ReCCCreate together at Dharav High School. Our work spans temple collections, processing, packaging and sharing products with the community.</p>
         </div>
-        <ul className="team-grid">{team.map((name, index) => <li key={name} className="card team-card"><span className="team-monogram" aria-hidden="true">{name.slice(0, 1)}</span><p className="mt-5 font-semibold">{name}</p><p className="mt-1 text-xs text-[#4e503a]">Student team</p><span className="mt-5 block text-[0.65rem] font-semibold tracking-[0.14em] text-[#5d614b]">0{index + 1}</span></li>)}</ul>
+        <ul className="team-grid">
+          {team.map((member) => (
+            <li key={member.photo} className="card team-card">
+              <div className="team-portrait">
+                <Image src={`/images/team/${member.photo}.webp`} alt={`Portrait of ${member.name}`} fill sizes="(max-width: 480px) 100vw, (max-width: 767px) 50vw, (max-width: 1023px) 33vw, 20vw" />
+              </div>
+              <div className="team-caption">
+                <h3>{member.name}</h3>
+                <p>Student team</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div></section>
 
       <section className="section-tight"><div className="container-site"><div className="flex flex-col gap-5 rounded-sm border border-black/[0.08] bg-[#c4c394] p-7 sm:flex-row sm:items-center sm:justify-between sm:p-9">
