@@ -9,6 +9,6 @@ export default function TempleCards({ temples }: { temples: TempleWithTotal[] })
     {!temple.photo_source && temple.photo_credit && <p className="mt-2 text-xs text-[#4e503a]">{temple.photo_credit}</p>}
     <div className="pt-5"><p className="eyebrow">{temple.area}</p><h3 className="mt-3">{temple.name}</h3>
     {(temple.collecting_since || temple.kg_collected !== null) && <div className="mt-5 flex justify-between gap-4 border-t border-black/15 pt-4 text-sm">{temple.collecting_since && <p>Collecting since {formatDate(temple.collecting_since, false)}</p>}{temple.kg_collected !== null && <p>{formatKg(temple.kg_collected)} kg collected</p>}</div>}
-    <a className="journey-link mt-5" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${temple.name} ${temple.area}`)}`} target="_blank" rel="noopener noreferrer">Find the temple ↗</a></div>
+    <a className="journey-link mt-5" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${temple.name} ${temple.area}`)}`} target="_blank" rel="noopener noreferrer">Find the temple </a></div>
   </li>)}</ul>;
 }

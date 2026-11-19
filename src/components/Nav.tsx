@@ -47,7 +47,7 @@ export default function Nav() {
               </Link>
             </li>
           ))}
-          <li className="hidden lg:list-item"><Link href="/shop" className="btn btn-primary nav-cta">Explore the shop <span aria-hidden="true">↗</span></Link></li>
+          <li className="hidden lg:list-item"><Link href="/shop" className="btn btn-primary nav-cta">Explore the shop </Link></li>
         </ul>
         <button
           ref={menuButton}
@@ -75,7 +75,7 @@ export default function Nav() {
               </Link>
             </li>
           ))}
-          <li className="px-2 pb-1 pt-2"><Link href="/shop" className="btn btn-primary w-full" onClick={() => setOpen(false)}>Explore the shop <span aria-hidden="true">↗</span></Link></li>
+          <li className="px-2 pb-1 pt-2"><Link href="/shop" className="btn btn-primary w-full" onClick={() => setOpen(false)}>Explore the shop </Link></li>
         </ul>
       </div>
     </header>

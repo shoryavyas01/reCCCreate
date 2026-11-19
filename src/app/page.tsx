@@ -31,7 +31,7 @@ export default async function Home() {
           <p className="eyebrow mb-7">ReCCCreate · Dharav High School, Bhankrota, Jaipur</p>
           <h1 className="hero-title">Temple flowers.<br /><span className="display-accent">Rangoli colours.</span></h1>
           <p className="body-copy hero-summary mt-7">Collected from Jaipur temples. Sorted by our student team. Remade as rangoli colour and compost.</p>
-          <div className="mt-8 flex flex-wrap gap-3"><Link href="/shop" className="btn btn-primary">Explore our rangoli colours & compost <span aria-hidden="true">↗</span></Link><Link href="#journey-heading" className="btn btn-text">See how it’s made <span aria-hidden="true">↓</span></Link></div>
+          <div className="mt-8 flex flex-wrap gap-3"><Link href="/shop" className="btn btn-primary">Explore our rangoli colours & compost </Link><Link href="#journey-heading" className="btn btn-text">See how it’s made </Link></div>
           <div className="hero-signature"><span className="hero-signature-mark" aria-hidden="true">✳</span><p>A student venture.<br /><span>Rooted in Dharav High School, Bhankrota.</span></p></div>
         </div>
         <div className="hero-art-wrap">
@@ -49,13 +49,13 @@ export default async function Home() {
 
     <section className="section story-section" data-reveal><div className="container-site story-grid">
       <div><p className="eyebrow mb-5">The idea, close to home</p><h2>An offering is precious.<br />Even <span className="display-accent">after the prayer.</span></h2></div>
-      <div className="story-copy"><p className="body-copy">Every morning, flowers offered at temples have already served a purpose. We collect them while they still have something to give.</p><p className="body-copy mt-4">We are students at Dharav High School in Bhankrota. Our work is practical: weigh the flowers, sort the petals, dry and grind them for rangoli colour, and send surplus to compost.</p><Link href="/about" className="journey-link mt-6">Meet the people behind it <span aria-hidden="true">↗</span></Link></div>
+      <div className="story-copy"><p className="body-copy">Every morning, flowers offered at temples have already served a purpose. We collect them while they still have something to give.</p><p className="body-copy mt-4">We are students at Dharav High School in Bhankrota. Our work is practical: weigh the flowers, sort the petals, dry and grind them for rangoli colour, and send surplus to compost.</p><Link href="/about" className="journey-link mt-6">Meet the people behind it </Link></div>
     </div></section>
 
     <FlowerJourney />
 
     <section className="section collection-section" data-reveal><div className="container-site">
-      <div className="section-heading"><div><p className="eyebrow mb-4">Two ways to begin again</p><h2>Made for rangoli.<br /><span className="display-accent">And for the earth.</span></h2></div><Link href="/shop" className="btn btn-secondary">Visit the shop ↗</Link></div>
+      <div className="section-heading"><div><p className="eyebrow mb-4">Two ways to begin again</p><h2>Made for rangoli.<br /><span className="display-accent">And for the earth.</span></h2></div><Link href="/shop" className="btn btn-secondary">Visit the shop </Link></div>
       <div className="collection-grid">
         <Link href="/shop?type=rangoli" className="collection-panel collection-colour"><div className="collection-product-image"><Image src="/images/products/kesar-kyari-front.webp" alt="Kesar Kyari rangoli colour — front of pouch" fill sizes="(max-width: 767px) 100vw, 50vw" /></div><div className="collection-panel-copy"><div><p className="eyebrow mb-3">The colours</p><h3>Rangoli colours</h3><p>Kesar Kyari and Sunheri Subah. Flower-based colours for patterns, decoration and celebrations.</p></div></div></Link>
         <Link href="/shop?type=compost" className="collection-panel collection-soil"><div className="collection-product-image"><Image src="/images/products/temple-bloom.webp" alt="Temple Bloom temple flower compost pouch" fill sizes="(max-width: 767px) 100vw, 50vw" /></div><div className="collection-panel-copy"><div><p className="eyebrow mb-3">The soil</p><h3>Temple Bloom</h3><p>Temple flower compost that returns surplus blooms to the growing cycle.</p></div></div></Link>
@@ -71,13 +71,13 @@ export default async function Home() {
     </div></div></section>
 
     <section className="section temples-section" data-reveal aria-labelledby="temples-heading"><div className="container-site">
-      <div className="section-heading"><div><p className="eyebrow mb-4">A local circle of care</p><h2 id="temples-heading">Our temple <span className="display-accent">partners.</span></h2><p className="body-copy mt-4 max-w-xl">The Jaipur temples connected with our flower collection journey.</p></div><Link href="/contact" className="btn btn-secondary">Become a partner ↗</Link></div>
+      <div className="section-heading"><div><p className="eyebrow mb-4">A local circle of care</p><h2 id="temples-heading">Our temple <span className="display-accent">partners.</span></h2><p className="body-copy mt-4 max-w-xl">The Jaipur temples connected with our flower collection journey.</p></div><Link href="/contact" className="btn btn-secondary">Become a partner </Link></div>
       <TempleCards temples={temples.data} />
     </div></section>
 
 
     <section className="section faq-section" data-reveal aria-labelledby="faq-heading"><div className="container-site faq-grid"><div><p className="eyebrow mb-5">A few useful answers</p><h2 id="faq-heading">Good questions.<br /><span className="display-accent">Straight answers.</span></h2></div><div>{questions.map((item, i) => <details className="faq-item" key={item.question}><summary><span className="faq-number">0{i + 1}</span><span>{item.question}</span><span className="faq-plus" aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}</div></div></section>
 
-    <section className="section-tight" data-reveal><div className="container-site"><div className="closing-card"><BotanicalMotif className="closing-botanical" /><div className="closing-copy"><p className="eyebrow mb-5">Temples · Schools · Volunteers</p><h2>Help us collect<br /><span className="display-accent">the next basket.</span></h2><p className="body-copy mt-5 max-w-xl">Manage a temple in Jaipur? Want to volunteer with the team? Tell us where you are and how you’d like to help.</p><div className="mt-7 flex flex-wrap gap-3"><Link href="/phool-mitra" className="btn btn-primary">Become a Phool Mitra ↗</Link><Link href="/contact" className="btn btn-secondary">Talk to the team ↗</Link></div></div></div></div></section>
+    <section className="section-tight" data-reveal><div className="container-site"><div className="closing-card"><BotanicalMotif className="closing-botanical" /><div className="closing-copy"><p className="eyebrow mb-5">Temples · Schools · Volunteers</p><h2>Help us collect<br /><span className="display-accent">the next basket.</span></h2><p className="body-copy mt-5 max-w-xl">Manage a temple in Jaipur? Want to volunteer with the team? Tell us where you are and how you’d like to help.</p><div className="mt-7 flex flex-wrap gap-3"><Link href="/phool-mitra" className="btn btn-primary">Become a Phool Mitra </Link><Link href="/contact" className="btn btn-secondary">Talk to the team </Link></div></div></div></div></section>
   </>;
 }

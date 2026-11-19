@@ -27,6 +27,7 @@ try {
     const title = html.match(/<title>(.*?)<\/title>/)?.[1];
     const description = html.match(/<meta name="description" content="([^"]+)"/i)?.[1];
     assert.ok(title && description, path + ': title and description');
+    assert.ok(title.includes('ReCCCreate'), path + ': branded title');
     assert.ok(!titles.has(title), path + ': unique title'); titles.add(title);
     assert.ok(!descriptions.has(description), path + ': unique description'); descriptions.add(description);
     assert.equal((html.match(/<h1(?:\s|>)/g) || []).length, 1, path + ': one main heading');
