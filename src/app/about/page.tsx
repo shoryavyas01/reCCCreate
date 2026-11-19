@@ -15,10 +15,38 @@ const team = [
   { name: "Aryaman Pandey", photo: "aryaman-pandey" },
 ];
 const steps = [
-  { title: "Collection", caption: "Flowers are picked up from partner temples each morning and weighed.", symbol: "01" },
-  { title: "A new purpose", caption: "Petals are sorted, sun-dried and ground into gulaal; surplus goes to a compost unit.", symbol: "02" },
-  { title: "Thoughtful packaging", caption: "Paper pouches carry a QR code that traces the story of each batch.", symbol: "03" },
-  { title: "Shared locally", caption: "Our products are shared at school and with the community.", symbol: "04" },
+  {
+    stage: "Collect",
+    title: "Begin with the flowers.",
+    caption: "Flowers offered at partner temples in Jaipur are collected and weighed. We separate the petals from wrappers, thread and other materials before processing.",
+    photo: "flower-collection",
+    alt: "Flowers being gathered into a sack beside collection tubs",
+    position: "50% 64%",
+  },
+  {
+    stage: "Prepare",
+    title: "Dry the petals. Grind the colour.",
+    caption: "Sorted petals are sun-dried, then ground into a fine powder to form the base of our rangoli colours. Surplus flowers are directed to compost.",
+    photo: "ground-petals",
+    alt: "Yellow and orange flower powder in bowls and spread on a work surface",
+    position: "50% 52%",
+  },
+  {
+    stage: "Package",
+    title: "Pack with a story to follow.",
+    caption: "The colour is packed in labelled paper pouches. Product information, batch details and a QR code keep the making of each pack part of its story.",
+    photo: "labelled-pouches",
+    alt: "ReCCCreate paper pouches showing the front label, product details and QR code",
+    position: "50% 70%",
+  },
+  {
+    stage: "Create",
+    title: "A new use for every shade.",
+    caption: "The finished colours return to the community for rangoli and decoration. Flowers that began as an offering become something to create with again.",
+    photo: "rangoli-colour",
+    alt: "Orange ReCCCreate rangoli colour and paper pouches arranged beside marigold petals",
+    position: "50% 100%",
+  },
 ];
 
 export default function About() {
@@ -37,10 +65,34 @@ export default function About() {
         </div>
       </div></section>
 
-      <section className="section-tight bg-[#d6b88a]" aria-labelledby="how-heading"><div className="container-site">
-        <div className="mb-9 max-w-2xl"><p className="eyebrow mb-4">The process</p><h2 id="how-heading">A little care at every step.</h2></div>
-        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{steps.map((step) => <li key={step.symbol} className="card process-card p-4"><div className="process-visual mb-5"><span className="font-serif text-4xl italic text-[#b66f3d]">{step.symbol}</span></div><h3>{step.title}</h3><p className="mt-3 text-sm leading-7 text-[#4e503a]">{step.caption}</p></li>)}</ol>
-        <div className="mt-7 flex items-center gap-3 text-sm text-[#4e503a]"><span className="h-2 w-2 rounded-full bg-[#c7773c]" aria-hidden="true" /><span>Each batch can be traced from the QR code on its pack.</span></div>
+      <section id="process" className="section process-section" aria-labelledby="how-heading"><div className="container-site">
+        <div className="two-column process-intro">
+          <div><p className="eyebrow mb-4">The process</p><h2 id="how-heading">From temple flowers<br />to <span className="display-accent">rangoli colour.</span></h2></div>
+          <p className="body-copy">Collection, preparation, packaging and a new use. A closer look at the work that gives offered flowers another purpose.</p>
+        </div>
+        <ol className="process-gallery">
+          {steps.map((step) => (
+            <li key={step.photo} className="process-card">
+              <figure>
+                <div className="process-photo">
+                  <Image src={`/images/process/${step.photo}.webp`} alt={step.alt} fill sizes="(max-width: 767px) 100vw, 50vw" style={{ objectPosition: step.position }} />
+                </div>
+                <figcaption className="process-caption">
+                  <p className="eyebrow">{step.stage}</p>
+                  <h3>{step.title}</h3>
+                  <p className="body-copy">{step.caption}</p>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ol>
+        <div className="process-closing">
+          <p>Made for rangoli and decorative use. Explore the colours, or help us collect the next basket of flowers.</p>
+          <div className="process-actions">
+            <Link href="/shop?type=gulaal" className="btn btn-primary">Explore the colours</Link>
+            <Link href="/phool-mitra" className="btn btn-secondary">Join a collection</Link>
+          </div>
+        </div>
       </div></section>
 
       <section className="section" aria-labelledby="team-heading"><div className="container-site">

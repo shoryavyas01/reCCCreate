@@ -86,7 +86,7 @@ export default function FlowerJourney() {
               <h3 className="journey-title">{stage.title}</h3>
               <p className="journey-description mt-4">{stage.description}</p>
             </div>
-            <Link href="/trace/sample" className="journey-link mt-7">Follow a sample batch <span aria-hidden="true">↗</span></Link>
+            <Link href="/about#process" className="journey-link mt-7">See the process in pictures</Link>
           </div>
         </div>
       </div>
