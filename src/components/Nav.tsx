@@ -9,6 +9,7 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/about", label: "Our story" },
   { href: "/shop", label: "Shop" },
+  { href: "/phool-mitra", label: "Phool Mitra" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -30,7 +31,7 @@ export default function Nav() {
     return () => { document.removeEventListener("pointerdown", closeOutside); document.removeEventListener("keydown", closeOnEscape); };
   }, [open]);
   const linkClass = (href: string) =>
-    `nav-link ${pathname === href || (href !== "/" && pathname.startsWith(href)) ? "nav-link-active" : ""}`;
+    `nav-link whitespace-nowrap ${pathname === href || (href !== "/" && pathname.startsWith(href)) ? "nav-link-active" : ""}`;
 
   return (
     <header className="site-header" ref={header}>
@@ -46,7 +47,7 @@ export default function Nav() {
               </Link>
             </li>
           ))}
-          <li><Link href="/shop" className="btn btn-primary nav-cta">Explore the shop <span aria-hidden="true">↗</span></Link></li>
+          <li className="hidden lg:list-item"><Link href="/shop" className="btn btn-primary nav-cta">Explore the shop <span aria-hidden="true">↗</span></Link></li>
         </ul>
         <button
           ref={menuButton}
