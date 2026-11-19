@@ -12,6 +12,7 @@ const howToUse = [
 export const catalogueProducts: Product[] = [
   {
     id: "sample-rangoli-kesar",
+    traceId: "RG-601",
     name: "Kesar Kyari rangoli colour",
     type: "gulaal",
     price_inr: 199,
@@ -37,6 +38,7 @@ export const catalogueProducts: Product[] = [
   },
   {
     id: "catalogue-rangoli-sunheri",
+    traceId: "1001",
     name: "Sunheri Subah rangoli colour",
     type: "gulaal",
     price_inr: 20,
@@ -63,6 +65,7 @@ export const catalogueProducts: Product[] = [
   },
   {
     id: "sample-compost",
+    traceId: "temple-bloom",
     name: "Temple Bloom flower compost",
     type: "compost",
     price_inr: 0,
