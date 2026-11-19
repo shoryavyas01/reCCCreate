@@ -1,4 +1,4 @@
-import { validateContact } from "@/lib/contact";
+import { validateContact, contactProductLabel } from "@/lib/contact";
 import { saveToSheet, sheetConfigured } from "@/lib/sheet";
 
 export const maxDuration = 55;
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   if ("error" in result) return fail(result.error, 400);
   if (!sheetConfigured) return fail("Direct delivery is not connected. Use the email draft below to contact the team.", 503);
   try {
-    const saved = await saveToSheet("contact", result.data);
+    const saved = await saveToSheet("contact", { ...result.data, topic: result.data.product ? `Buying · ${contactProductLabel(result.data.product)}` : result.data.topic });
     if (!saved.saved) return fail("Your message was not saved. Please retry or use the email draft below.", 502);
     return Response.json({ ok: true });
   } catch {
