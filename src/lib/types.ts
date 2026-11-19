@@ -13,6 +13,7 @@ export type Collection = { id: string; temple_id: string; date: string; kg: numb
 
 export type Product = {
   id: string;
+  slug?: string;
   name: string;
   type: "gulaal" | "compost";
   price_inr: number;
@@ -21,7 +22,6 @@ export type Product = {
   ingredients: string | null;
   in_stock: boolean;
   images?: { src: string; label: "Front" | "Back"; alt: string }[];
-  traceId?: string;
   details?: {
     shade?: string;
     howToUse?: string[];
@@ -38,9 +38,4 @@ export type Batch = {
   kg_flowers_used: number;
   kg_produced: number | null;
   made_by: string | null;
-};
-
-export type BatchTrace = Batch & {
-  product: Pick<Product, "name" | "type" | "size"> | null;
-  temple: Pick<Temple, "name" | "area"> | null;
 };

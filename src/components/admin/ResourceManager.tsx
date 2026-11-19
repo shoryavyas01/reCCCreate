@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import QRCode from "qrcode";
 import { productDisplayName } from "@/lib/products";
 
 export type Option = { value: string; label: string };
@@ -17,8 +16,6 @@ export type Field = {
 };
 type Row = Record<string, string | number | boolean | null>;
 
-const siteUrl = () => (process.env.NEXT_PUBLIC_SITE_URL || window.location.origin).replace(/\/$/, "");
-
 /* One add / edit / delete screen, reused for every table.
    Supabase row-level security rejects any write that does not come from an admin. */
 export default function ResourceManager({
@@ -26,13 +23,11 @@ export default function ResourceManager({
   table,
   fields,
   orderBy,
-  showQr = false,
 }: {
   db: SupabaseClient;
   table: string;
   fields: Field[];
   orderBy: string;
-  showQr?: boolean;
 }) {
   const [rows, setRows] = useState<Row[]>([]);
   const [editing, setEditing] = useState<Row | null>(null);
@@ -115,16 +110,6 @@ export default function ResourceManager({
     } finally { setBusy(false); }
   }
 
-  async function downloadQr(id: string) {
-    try {
-      const url = await QRCode.toDataURL(`${siteUrl()}/trace/${id}`, { width: 600, margin: 2 });
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `recccreate-batch-${id}.png`;
-      a.click();
-    } catch { setMessage({ ok: false, text: "Could not create the QR code. Please try again." }); }
-  }
-
   const show = (f: Field, row: Row) => {
     const v = row[f.key];
     if (f.type === "checkbox") return v ? "Yes" : "No";
@@ -196,7 +181,6 @@ export default function ResourceManager({
           <table className="w-full text-left text-[15px]">
             <thead>
               <tr className="border-b-2 border-green">
-                {showQr && <th className="p-2">Batch</th>}
                 {fields.map((f) => <th key={f.key} className="p-2">{f.short ?? f.label}</th>)}
                 <th className="p-2"><span className="sr-only">Actions</span></th>
               </tr>
@@ -204,14 +188,8 @@ export default function ResourceManager({
             <tbody>
               {rows.map((row) => (
                 <tr key={String(row.id)} className="border-b border-green/25 align-top">
-                  {showQr && (
-                    <td className="p-2">
-                      <a className="underline" href={`/trace/${row.id}`} target="_blank" rel="noreferrer">{row.id}</a>
-                    </td>
-                  )}
                   {fields.map((f) => <td key={f.key} className="p-2">{show(f, row)}</td>)}
                   <td className="whitespace-nowrap p-2 text-right">
-                    {showQr && <button className="mr-3 font-extrabold underline" onClick={() => downloadQr(String(row.id))}>QR code</button>}
                     <button className="mr-3 font-extrabold underline" disabled={busy} onClick={() => resetForm(row)}>Edit</button>
                     <button className="font-extrabold text-error underline" disabled={busy} onClick={() => remove(row)}>Delete</button>
                   </td>

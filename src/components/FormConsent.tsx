@@ -1,0 +1,4 @@
+import Link from "next/link";
+export default function FormConsent({ order = false }: { order?: boolean }) {
+  return <div><label className="form-consent"><input type="checkbox" name="consent" required /><span>I am 18 or older, have read the <Link href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</Link>{order && <> and <Link href="/terms" target="_blank" rel="noopener noreferrer">Terms &amp; Conditions</Link></>}, and agree to be contacted about this {order ? "order request" : "request"}.</span></label><p className="form-policy-note mt-3">Under 18? Ask a parent or guardian to submit using their own contact details.{order && <> Please read our <Link className="underline" href="/returns" target="_blank" rel="noopener noreferrer">delivery and returns policy</Link> before requesting an order.</>}</p></div>;
+}

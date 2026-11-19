@@ -1,0 +1,8 @@
+import Link from "next/link";
+import { contactEmail } from "@/lib/contact";
+import { projectLocation } from "@/lib/team";
+import { policyUpdated } from "@/lib/site";
+type Section = { heading: string; paragraphs: string[]; bullets?: string[] };
+export default function PolicyPage({ title, intro, sections }: { title: string; intro: string; sections: Section[] }) {
+  return <section className="section"><div className="container-site policy-layout"><div className="policy-intro"><p className="eyebrow mb-5">Clear information, thoughtful choices</p><h1>{title}</h1><p className="body-copy mt-6">{intro}</p><p className="mt-4 text-sm text-[#4e503a]">Updated {policyUpdated}</p></div><div className="policy-sections"><nav className="policy-nav" aria-label="Policies"><Link href="/privacy">Privacy policy</Link><Link href="/terms">Terms &amp; conditions</Link><Link href="/returns">Orders, delivery &amp; returns</Link><Link href="/contact">Contact the team</Link></nav><div className="policy-content">{sections.map((section) => <section key={section.heading}><h2>{section.heading}</h2>{section.paragraphs.map((text) => <p key={text}>{text}</p>)}{section.bullets && <ul>{section.bullets.map((text) => <li key={text}>{text}</li>)}</ul>}</section>)}<section className="policy-contact"><h2>Questions or concerns?</h2><p>Contact the ReCCCreate project team at {projectLocation}.</p><p><a href={`mailto:${contactEmail}`}>{contactEmail}</a></p><p>For an order issue, include your name, product and the agreed delivery details. For a privacy request, tell us which information you would like to access, correct or delete.</p></section></div></div></div></section>;
+}

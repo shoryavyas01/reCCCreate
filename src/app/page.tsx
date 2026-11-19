@@ -1,20 +1,21 @@
+import { pageMetadata } from "@/lib/site";
 import Image from "next/image";
 import Link from "next/link";
 import BotanicalMotif from "@/components/BotanicalMotif";
-import BatchLookup from "@/components/BatchLookup";
 import FlowerJourney from "@/components/FlowerJourney";
 import TempleCards from "@/components/TempleCards";
 import { getTemples } from "@/lib/data";
 import { publishedImpact } from "@/lib/impact";
 import { formatDate, formatKg } from "@/lib/format";
 
+export const metadata = pageMetadata('Rangoli colour & flower compost in Jaipur', 'ReCCCreate is a student venture at Dharav High School, Bhankrota, Jaipur, recycling temple flowers into rangoli colour and flower compost.', '/');
+
 export const revalidate = 60;
 
 const questions = [
   { question: "What happens to the temple flowers?", answer: "We collect and weigh flowers from partner temples. Petals are sorted, sun-dried and ground for rangoli colour. Surplus flowers go to a compost unit." },
-  { question: "How do I place an order?", answer: "Choose a product in the shop and send an order request. The team will call to confirm availability, price and delivery. Payment is by UPI on delivery; no online payment is collected here." },
+  { question: "How do I place an order?", answer: "Choose a product in the shop and send an order request. The team will call to confirm availability, price and delivery. The team confirms payment and delivery arrangements; no online payment is collected here." },
   { question: "Can my temple or school take part?", answer: "Yes. Use the contact form to tell us your location and how you would like to help. We will discuss collection arrangements with you. A temple is named publicly only after giving permission." },
-  { question: "How can I trace a pack?", answer: "Scan the QR code on the packaging, or enter its batch ID below. Explore product ingredients, packaging details, batch information and our student team. Source temples, collection dates and flower weights appear when recorded for a batch." },
 ];
 
 export default async function Home() {
@@ -74,7 +75,6 @@ export default async function Home() {
       <TempleCards temples={temples.data} />
     </div></section>
 
-    <section className="section trace-section" data-reveal><div className="container-site trace-grid"><div><p className="eyebrow mb-5">From offering to your hands</p><h2>Trace the flowers<br /><span className="display-accent">in your pack.</span></h2><p className="body-copy mt-5">Explore our products, recorded batch details and the student team behind the work.</p><Link href="/trace" className="journey-link mt-5">Trace our products ↗</Link></div><BatchLookup /></div></section>
 
     <section className="section faq-section" data-reveal aria-labelledby="faq-heading"><div className="container-site faq-grid"><div><p className="eyebrow mb-5">A few useful answers</p><h2 id="faq-heading">Good questions.<br /><span className="display-accent">Straight answers.</span></h2></div><div>{questions.map((item, i) => <details className="faq-item" key={item.question}><summary><span className="faq-number">0{i + 1}</span><span>{item.question}</span><span className="faq-plus" aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}</div></div></section>
 

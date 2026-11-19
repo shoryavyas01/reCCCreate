@@ -4,6 +4,8 @@ import localFont from "next/font/local";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import SiteMotion from "@/components/SiteMotion";
+import { siteUrl, isPreview, socialImage } from "@/lib/site";
+import SiteStructuredData from "@/components/SiteStructuredData";
 import "./globals.css";
 
 const montserrat = localFont({
@@ -21,31 +23,16 @@ const dmSerifDisplay = localFont({
   display: "swap",
   adjustFontFallback: "Times New Roman",
 });
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-const socialImage = siteUrl ? "/images/marigold-to-color.webp" : undefined;
-
 export const metadata: Metadata = {
-  ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
-  title: {
-    default: "ReCCCreate — A second life for temple flowers",
-    template: "%s | ReCCCreate",
-  },
-  description:
-    "A student-led circularity project in Jaipur, turning temple-offered flowers into rangoli colour and compost. Credit. Community. Change.",
+  metadataBase: new URL(siteUrl),
+  title: { default: "ReCCCreate — Rangoli colour & flower compost in Jaipur", template: "%s | ReCCCreate" },
+  description: "A student venture at Dharav High School, Bhankrota, Jaipur, turning temple flowers into rangoli colour and flower compost. Credit. Community. Change.",
   applicationName: "ReCCCreate",
-  openGraph: {
-    title: "ReCCCreate — A second life for temple flowers",
-    description:
-      "From temple offerings to something useful again. A student-led circularity project in Jaipur.",
-    type: "website",
-    images: socialImage ? [{ url: socialImage, width: 1200, height: 900, alt: "Marigold petals and natural pigment" }] : undefined,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "ReCCCreate — A second life for temple flowers",
-    description: "Credit. Community. Change. A Jaipur student venture giving flowers a second life.",
-    images: socialImage ? [socialImage] : undefined,
-  },
+  robots: isPreview ? { index: false, follow: false } : { index: true, follow: true },
+  openGraph: { title: "ReCCCreate — A second life for temple flowers", description: "Temple flowers remade as rangoli colour and compost by students at Dharav High School, Bhankrota, Jaipur.", url: siteUrl, siteName: "ReCCCreate", locale: "en_IN", type: "website", images: [socialImage] },
+  twitter: { card: "summary_large_image", title: "ReCCCreate — A second life for temple flowers", description: "Credit. Community. Change. From Dharav High School, Bhankrota, Jaipur.", images: [socialImage.url] },
+  icons: { icon: [{ url: "/icon.svg", type: "image/svg+xml" }, { url: "/icon-192.png", sizes: "192x192", type: "image/png" }], apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }] },
+  manifest: "/manifest.webmanifest",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -58,6 +45,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Skip to content
         </a>
+        <SiteStructuredData />
         <SiteMotion />
         <Nav />
         <main id="main" className="flex-1">

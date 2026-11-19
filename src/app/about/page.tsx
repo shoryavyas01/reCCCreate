@@ -1,12 +1,9 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/site";
 import Link from "next/link";
 import Image from "next/image";
 import { team } from "@/lib/team";
 
-export const metadata: Metadata = {
-  title: "Our story",
-  description: "Meet the students behind ReCCCreate and discover how temple flowers find a second life in Jaipur.",
-};
+export const metadata = pageMetadata('Our story & process', 'Meet the five Dharav High School students behind ReCCCreate and see how Jaipur temple flowers become rangoli colour and compost.', '/about');
 
 const steps = [
   {
@@ -27,8 +24,8 @@ const steps = [
   },
   {
     stage: "Package",
-    title: "Pack with a story to follow.",
-    caption: "The colour is packed in labelled paper pouches. Product information, batch details and a QR code keep the making of each pack part of its story.",
+    title: "Pack with care.",
+    caption: "The colour is packed in labelled paper pouches, with ingredients and directions for use. Every pouch brings recovered flower petals back into the community.",
     photo: "labelled-pouches",
     alt: "ReCCCreate paper pouches showing the front label, product details and QR code",
     position: "50% 70%",

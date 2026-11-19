@@ -22,7 +22,7 @@ export function normaliseProduct(product: Product): Product {
     price_inr: catalogue?.price_inr ?? product.price_inr,
     images: product.images ?? catalogue?.images,
     details: product.details ?? catalogue?.details,
-    traceId: product.traceId ?? catalogue?.traceId,
+    slug: product.slug ?? catalogue?.slug,
   };
 }
 
