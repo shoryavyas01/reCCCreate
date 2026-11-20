@@ -11,7 +11,7 @@ function publicOrigin() {
 export const siteUrl = publicOrigin();
 export const isPreview = process.env.VERCEL_ENV === "preview";
 export const siteName = "ReCCCreate";
-export const policyUpdated = "19 November 2026";
+export const policyUpdated = "20 November 2026";
 export const socialImage = { url: "/social/recccreate-share.png", width: 1200, height: 630, alt: "ReCCCreate: temple flowers remade as rangoli colour and compost in Jaipur" };
 export function pageMetadata(title: string, description: string, path: string): Metadata {
   return {
