@@ -5,6 +5,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import SiteMotion from "@/components/SiteMotion";
 import { siteUrl, isPreview, socialImage } from "@/lib/site";
+import SiteAnalytics from "@/components/SiteAnalytics";
 import SiteStructuredData from "@/components/SiteStructuredData";
 import "./globals.css";
 
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           {children}
         </main>
         <Footer />
+        {process.env.VERCEL_ENV === "production" && <SiteAnalytics />}
       </body>
     </html>
   );
