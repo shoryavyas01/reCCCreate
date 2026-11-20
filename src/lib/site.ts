@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-const fallbackOrigin = "https://re-cc-create.vercel.app";
+const fallbackOrigin = "https://recccreate.in";
 function publicOrigin() {
   try {
     const candidate = new URL(process.env.NEXT_PUBLIC_SITE_URL?.trim() || fallbackOrigin);
