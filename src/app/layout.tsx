@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import SiteMotion from "@/components/SiteMotion";
 import { siteUrl, isPreview, socialImage } from "@/lib/site";
 import SiteStructuredData from "@/components/SiteStructuredData";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const montserrat = localFont({
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           {children}
         </main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
